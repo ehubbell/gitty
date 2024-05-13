@@ -1,35 +1,19 @@
 #!/usr/bin/env node
 
-import sade from "sade";
-const Fs = require("fs-extra");
+const sade = require("sade");
+// const ora = require("ora");
 import { GithubService } from "./services/github-service";
 import { StorageService } from "./services/storage-service";
 import { version } from "../package.json";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
-const cli = sade("gitto");
-
-cli
+const cli = sade("playbooks-tar <url>", true)
   .version(version)
-  .option("-c, --config", "Path to custom config", "~/etc/gitto.config.js");
-
-cli.command("env").action(async () => {
-  const fileExists = await Fs.promises
-    .stat(`~/etc/gitto.config.js`)
-    .then(() => true)
-    .catch(() => false);
-  if (!fileExists) return console.log("Config file does not exist");
-  const contents = await Fs.readFile(`~/etc/gitto.config.js`);
-  return console.log(contents);
-});
-
-cli
-  .command("fetch <url>")
   .describe("Download Github repository or subdirectory to your local machine.")
   .option("-d, --destination", "Path to destination directory.")
   .option("-v, --version", "Specific tarball version (optional).")
-  .option("-c, --clean", "Perform cleanup after download is complete.")
+  .option("-c, --clone", "Perform clone after download is complete.")
   .example("fetch vercel/vercel")
   .example("fetch vercel/vercel/examples/angular")
   .example("fetch vercel/vercel/examples/angular --directory storage")
@@ -47,10 +31,10 @@ cli
     console.log("url: ", { ownerId, repoId, nestedPath });
 
     // Options
-    const destination = opts.d || opts.destination;
-    const version = opts.v || opts.version;
-    const clean = opts.c || opts.clean;
-    console.log("options: ", { destination, version, clean });
+    const destination = opts.d || opts.destination || "";
+    const version = opts.v || opts.version || "";
+    const clone = opts.c || opts.clone || false;
+    console.log("options: ", { destination, version, clone });
 
     // Github Service
     const githubClient = new GithubService(GITHUB_TOKEN);
@@ -68,7 +52,7 @@ cli
     const storageClient = new StorageService({
       basePath,
       ownerId,
-      repoId: fileName || repoId,
+      repoId,
       nestedPath,
     });
     const valid = await storageClient.checkValid();

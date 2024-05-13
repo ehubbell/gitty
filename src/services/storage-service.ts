@@ -104,7 +104,7 @@ class StorageService {
           );
           const formattedPath = slicedPathName.replace(
             "/" + this.nestedPath,
-            ""
+            "/"
           );
           const finalPath = this.repoPath + formattedPath;
           if (type === "Directory") return entry.autodrain();

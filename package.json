@@ -1,8 +1,8 @@
 {
-  "name": "gitto",
+  "name": "playbooks-tar",
   "version": "1.0.0",
   "description": "A simple git tarball CLI for Github repositories and subdirectories.",
-  "license": "MIT",
+  "license": "ISC",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
