@@ -7,7 +7,7 @@ A simple Git Download CLI for Github repositories and subdirectories.
 
 
 ## Why we built this
-We're working on a related project so we already had quite a bit of this functionality built. We also ran into several issues using Degit.
+We ran into issues using Degit on some nested directories and felt like their CLI wasn't expansive enough for the direction we'd like to go.
 
 
 ## Description
