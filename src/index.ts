@@ -1,14 +1,31 @@
 #!/usr/bin/env node
 
 import sade from "sade";
+const Fs = require("fs-extra");
 import { GithubService } from "./services/github-service";
 import { StorageService } from "./services/storage-service";
 import { version } from "../package.json";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
-const cli = sade("gitto <url>", true)
+const cli = sade("gitto");
+
+cli
   .version(version)
+  .option("-c, --config", "Path to custom config", "~/etc/gitto.config.js");
+
+cli.command("env").action(async () => {
+  const fileExists = await Fs.promises
+    .stat(`~/etc/gitto.config.js`)
+    .then(() => true)
+    .catch(() => false);
+  if (!fileExists) return console.log("Config file does not exist");
+  const contents = await Fs.readFile(`~/etc/gitto.config.js`);
+  return console.log(contents);
+});
+
+cli
+  .command("fetch <url>")
   .describe("Download Github repository or subdirectory to your local machine.")
   .option("-d, --destination", "Path to destination directory.")
   .option("-v, --version", "Specific tarball version (optional).")

@@ -4,8 +4,8 @@ A simple git tarball CLI for Github repositories and subdirectories.
 
 ## Quick Start
 - `npm i gitto -g`
-- `gitto <github_repo_url>`
-- `gitto <github_repo_url> --directory ~/repos`
+- `gitto fetch <github_repo_url>`
+- `gitto fetch <github_repo_url> --directory ~/repos`
 
 
 ## Description
@@ -14,11 +14,17 @@ You can then download any public Github repository or subdirectory per the quick
 
 
 ## How it works
-Gitto downloads a copy of the main repository's tarball to your local machine, unzips the file, formats it, and then store the formatted version on your local directory in whichever directory you pass via the `--destination` parameter. As part of this, we automatically remove the `.git` directory so you start with a fresh slate.
+Gitto downloads a copy of the main repository's tarball to your local machine, unzips the file, formats it, and then store the formatted version in your current working directory. Alternatively, you can pass in a `--directory` parameter indicating where you want to install the repository. As part of the formatting, we automatically remove the `.git` directory and the initial download so you'll start with a clean working repository.
 
 
 ## Why we built this
 We ran into issues using Degit on some nested directories and felt like their CLI wasn't expansive enough for a couple of use-cases we have in mind.
+
+
+## Config
+Gitto will read the following variables from your gitto config file and use them as your defaults. You can override the location of your config file by passing `-c path/to/config` in any command.
+- GITHUB_TOKEN
+- DIRECTORY
 
 
 ## Author
