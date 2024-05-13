@@ -1,27 +1,24 @@
 ## Overview
-A simple Git Download CLI for Github repositories and subdirectories.
+A simple git tarball CLI for Github repositories and subdirectories.
+
 
 ## Quick Start
-- `npm i -g gitdl`
-- `gitdl fetch <github_repo_url>`
-
-
-## Why we built this
-We ran into issues using Degit on some nested directories and felt like their CLI wasn't expansive enough for the direction we'd like to go.
+- `npm i gitto -g`
+- `gitto <github_repo_url>`
+- `gitto <github_repo_url> --directory ~/repos`
 
 
 ## Description
-The commands above will install `gitdl` to your machine and make the `gitdl` command globally available.
-You can then download any public Github repository or subdirectory by simply copy / pasting the Github URL per the quickstart.
+The commands above will install `gitto` to your local machine and make the `gitto` command globally available.
+You can then download any public Github repository or subdirectory per the quick start instructions.
 
 
 ## How it works
-When you run the command, we download a copy of the repo's tarball to your local machine and then unzip that file appropriately to the desired location on your machine while taking into account the nested URL path (if one exist). As part of the workflow, we remove the `.git` directory so you're then working with a clean slate.
+Gitto downloads a copy of the main repository's tarball to your local machine, unzips the file, formats it, and then store the formatted version on your local directory in whichever directory you pass via the `--destination` parameter. As part of this, we automatically remove the `.git` directory so you start with a fresh slate.
 
 
-## Options
-- version
-- fetch
+## Why we built this
+We ran into issues using Degit on some nested directories and felt like their CLI wasn't expansive enough for a couple of use-cases we have in mind.
 
 
 ## Author
@@ -31,6 +28,7 @@ When you run the command, we download a copy of the repo's tarball to your local
 
 ## Inspiration
 - degit
+- gittar
 
 
 ## Contributions

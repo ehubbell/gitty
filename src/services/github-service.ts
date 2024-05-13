@@ -16,15 +16,23 @@ class GithubService {
 
   // Queries
   async getRepoZip(ownerId: string, repoId: string) {
-    const endpoint = `/repos/${ownerId}/${repoId}/zipball`;
-    const response = await this.client.request(`GET ${endpoint}`);
-    return { status: response.status, data: response.data };
+    try {
+      const endpoint = `/repos/${ownerId}/${repoId}/zipball`;
+      const response = await this.client.request(`GET ${endpoint}`);
+      return { status: response.status, data: response.data };
+    } catch (e) {
+      return { status: e.status, message: e.message };
+    }
   }
 
   async getRepoVersionZip(ownerId: string, repoId: string, versionId?: string) {
-    const endpoint = `/repos/${ownerId}/${repoId}/zipball/${versionId}`;
-    const response = await this.client.request(`GET ${endpoint}`);
-    return { status: response.status, data: response.data };
+    try {
+      const endpoint = `/repos/${ownerId}/${repoId}/zipball/${versionId}`;
+      const response = await this.client.request(`GET ${endpoint}`);
+      return { status: response.status, data: response.data };
+    } catch (e) {
+      return { status: e.status, message: e.message };
+    }
   }
 }
 

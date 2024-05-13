@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import sade from "sade";
 import { GithubService } from "./services/github-service";
 import { StorageService } from "./services/storage-service";
@@ -7,8 +9,10 @@ const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
 const cli = sade("gitto <url>", true)
   .version(version)
-  .describe("Download Github repository or subdirectory to your local machien.")
-  .option("-d, --directory", "Path to destination directory")
+  .describe("Download Github repository or subdirectory to your local machine.")
+  .option("-d, --destination", "Path to destination directory.")
+  .option("-v, --version", "Specific tarball version (optional).")
+  .option("-c, --clean", "Perform cleanup after download is complete.")
   .example("fetch vercel/vercel")
   .example("fetch vercel/vercel/examples/angular")
   .example("fetch vercel/vercel/examples/angular --directory storage")
@@ -22,30 +26,42 @@ const cli = sade("gitto <url>", true)
       .split("/")
       .slice(4, fragments.length)
       .join("/");
-    console.log("params: ", { ownerId, repoId, nestedPath });
+    const fileName = fragments.split("/")[fragments.length - 1];
+    console.log("url: ", { ownerId, repoId, nestedPath });
 
     // Options
-    console.log("options: ", opts);
-    const directory = opts.d || opts.directory;
+    const destination = opts.d || opts.destination;
+    const version = opts.v || opts.version;
+    const clean = opts.c || opts.clean;
+    console.log("options: ", { destination, version, clean });
 
     // Github Service
     const githubClient = new GithubService(GITHUB_TOKEN);
-    const response = await githubClient.getRepoZip(ownerId, repoId);
-    console.log("github: ", { status: response.status });
+    console.log("Fetching repo...");
+    const response = version
+      ? await githubClient.getRepoVersionZip(ownerId, repoId, version)
+      : await githubClient.getRepoZip(ownerId, repoId);
+    if (response.status !== 200) {
+      console.log("github: ", response);
+      return response;
+    }
 
     // Storage Service
-    const basePath = directory || "gitto/storage";
+    const basePath = destination || process.cwd();
     const storageClient = new StorageService({
       basePath,
       ownerId,
-      repoId,
+      repoId: fileName || repoId,
       nestedPath,
     });
-    console.log("storage: ", storageClient.repoPath);
+    const valid = await storageClient.checkValid();
+    if (!valid)
+      return console.log("Please clear your destination directory first.");
     await storageClient.saveRepo(response.data);
     await storageClient.unzipRepo();
     await storageClient.cleanRepo();
-    await storageClient.zipRepo();
+    await storageClient.removeZip();
+    console.log("Done.");
   });
 
 cli.parse(process.argv);

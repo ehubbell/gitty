@@ -28,66 +28,58 @@ class StorageService {
 
   /* ----- Computed ----- */
   get repoPath() {
-    return `${this.basePath}/repos/${this.ownerId}/${this.repoId}`;
-  }
-
-  get repoZipFile() {
-    const computedFileName = this.versionId
-      ? `${this.versionId}.zip`
-      : "default.zip";
-    return `${this.basePath}/repos/${this.ownerId}/${this.repoId}/${computedFileName}`;
-  }
-
-  get tempPath() {
-    const computedVersion = this.versionId ? this.versionId : "default";
-    return `${this.basePath}/temp/${this.ownerId}/${this.repoId}/${computedVersion}`;
-  }
-
-  get zipPath() {
-    return `${this.basePath}/zips/${this.ownerId}/${this.repoId}`;
+    return this.basePath;
   }
 
   get zipFile() {
-    const computedFileName = this.versionId ? `${this.versionId}` : "default";
-    return `${this.basePath}/zips/${this.ownerId}/${this.repoId}/${computedFileName}.zip`;
+    return `${this.repoPath}/${this.repoId}.zip`;
   }
 
   /* ----- Helpers ----- */
-  async checkPath(pathName) {
+  async checkPath(pathName: string) {
     return await Fs.promises
       .stat(pathName)
       .then(() => true)
       .catch(() => false);
   }
 
-  async checkOrCreatePath(pathName) {
+  async checkOrCreatePath(pathName: string) {
     const pathExists = await this.checkPath(pathName);
     if (!pathExists) await Fs.mkdirSync(pathName, { recursive: true });
   }
 
-  async fileStats(filePath) {
+  async fileStats(filePath: string) {
     return await Fs.stat(filePath);
   }
 
-  async removePath(pathName) {
+  async removePath(pathName: string) {
     const pathExists = await this.checkPath(pathName);
     if (pathExists) await Fs.rm(pathName, { recursive: true });
   }
 
-  async writeFile(filePath, content) {
+  async writeFile(filePath: string, content: Buffer) {
     return await Fs.writeFile(filePath, content);
   }
 
   /* ----- Methods ----- */
-  async checkZip() {
-    console.log("checking zip...");
-    return await this.checkPath(this.zipFile);
+  async checkValid() {
+    console.log("Checking path: ", this.repoPath);
+    const pathExists = await this.checkPath(this.repoPath);
+    if (pathExists) {
+      const path = await Fs.promises.stat(this.repoPath);
+      if (path.isDirectory()) {
+        const entries = await Fs.readdir(this.repoPath);
+        return entries.length > 0 ? false : true;
+      }
+      return false;
+    }
+    return true;
   }
 
-  async saveRepo(buffer) {
-    console.log("saving repo...");
+  async saveRepo(buffer: ArrayBuffer) {
+    console.log("Saving repo...");
     await this.checkOrCreatePath(this.repoPath);
-    await this.writeFile(this.repoZipFile, Buffer.from(buffer));
+    await this.writeFile(this.zipFile, Buffer.from(buffer));
     console.log("repo saved.");
   }
 
@@ -97,14 +89,13 @@ class StorageService {
   }
 
   async unzipRepo() {
-    console.log("unzipping repo: ", this.repoZipFile);
-    await this.checkOrCreatePath(this.tempPath);
-    const basePath = this.tempPath;
+    console.log("Unzipping repo: ", this.zipFile);
+    await this.checkOrCreatePath(this.repoPath);
 
     await new Promise((resolve, reject) => {
-      Fs.createReadStream(this.repoZipFile)
+      Fs.createReadStream(this.zipFile)
         .pipe(Unzip.Parse())
-        .on("entry", (entry) => {
+        .on("entry", (entry: any) => {
           const type = entry.type;
           const fileName = entry.path;
           const slicedPathName = fileName.slice(
@@ -115,7 +106,7 @@ class StorageService {
             "/" + this.nestedPath,
             ""
           );
-          const finalPath = basePath + formattedPath;
+          const finalPath = this.repoPath + formattedPath;
           if (type === "Directory") return entry.autodrain();
           if (this.nestedPath) {
             if (fileName.includes(this.nestedPath)) {
@@ -134,19 +125,19 @@ class StorageService {
   }
 
   async cleanRepo() {
-    await this.removePath(this.tempPath + "/.git");
-    await this.removePath(this.tempPath + "/.github");
+    await this.removePath(this.repoPath + "/.git");
+    await this.removePath(this.repoPath + "/.github");
   }
 
   async zipRepo() {
-    console.log("zipping repo: ", this.zipPath);
-    await this.checkOrCreatePath(this.zipPath);
+    console.log("Zipping repo: ", this.repoPath);
+    await this.checkOrCreatePath(this.repoPath);
     const archive = Archiver("zip", { zlib: { level: 9 } });
     const stream = Fs.createWriteStream(this.zipFile);
 
     await new Promise((resolve, reject) => {
       stream.on("close", (v) => resolve(v));
-      archive.directory(this.tempPath, false);
+      archive.directory(this.repoPath, false);
       archive.on("error", (err) => reject(err));
       archive.pipe(stream);
       archive.finalize();
@@ -155,8 +146,11 @@ class StorageService {
 
   async removeRepo() {
     await this.removePath(this.repoPath);
-    await this.removePath(this.tempPath);
-    return await this.removePath(this.zipPath);
+  }
+
+  async removeZip() {
+    console.log("Removing zip...");
+    await this.removePath(this.zipFile);
   }
 }
 
