@@ -32,6 +32,7 @@
     "fstream": "^1.0.12",
     "ora": "^8.0.1",
     "sade": "^1.8.1",
+    "simple-git": "^3.24.0",
     "unzip-stream": "^0.3.4",
     "vite-plugin-dts": "^3.9.1"
   },

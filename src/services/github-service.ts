@@ -5,8 +5,8 @@ interface GithubService {
 }
 
 class GithubService {
-  constructor(token: string) {
-    this.token = token;
+  constructor(props: { token: string }) {
+    this.token = props?.token;
   }
 
   /* ----- Computes ----- */
@@ -28,6 +28,16 @@ class GithubService {
   async getRepoVersionZip(ownerId: string, repoId: string, versionId?: string) {
     try {
       const endpoint = `/repos/${ownerId}/${repoId}/zipball/${versionId}`;
+      const response = await this.client.request(`GET ${endpoint}`);
+      return { status: response.status, data: response.data };
+    } catch (e) {
+      return { status: e.status, message: e.message };
+    }
+  }
+
+  async createRepo(ownerId: string, repoId: string) {
+    try {
+      const endpoint = `/repos/${ownerId}/${repoId}/zipball`;
       const response = await this.client.request(`GET ${endpoint}`);
       return { status: response.status, data: response.data };
     } catch (e) {
