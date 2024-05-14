@@ -2,6 +2,7 @@ const Archiver = require("archiver");
 const Fs = require("fs-extra");
 const Stream = require("fstream");
 const Unzip = require("unzip-stream");
+import * as FileSystem from "../utils/file-system";
 
 interface StorageService {
   basePath: string;
@@ -31,36 +32,10 @@ class StorageService {
     return `${this.basePath}/${this.repoId}.zip`;
   }
 
-  /* ----- Helpers ----- */
-  async checkPath(pathName: string) {
-    return await Fs.promises
-      .stat(pathName)
-      .then(() => true)
-      .catch(() => false);
-  }
-
-  async checkOrCreatePath(pathName: string) {
-    const pathExists = await this.checkPath(pathName);
-    if (!pathExists) await Fs.mkdirSync(pathName, { recursive: true });
-  }
-
-  async fileStats(filePath: string) {
-    return await Fs.stat(filePath);
-  }
-
-  async removePath(pathName: string) {
-    const pathExists = await this.checkPath(pathName);
-    if (pathExists) await Fs.rm(pathName, { recursive: true });
-  }
-
-  async writeFile(filePath: string, content: Buffer) {
-    return await Fs.writeFile(filePath, content);
-  }
-
   /* ----- Methods ----- */
-  async checkValid() {
+  async checkEmpty() {
     console.log("Checking path: ", this.basePath);
-    const pathExists = await this.checkPath(this.basePath);
+    const pathExists = await FileSystem.checkPath(this.basePath);
     if (pathExists) {
       const path = await Fs.promises.stat(this.basePath);
       if (path.isDirectory()) {
@@ -74,19 +49,19 @@ class StorageService {
 
   async saveRepo(buffer: ArrayBuffer) {
     console.log("Saving repo...");
-    await this.checkOrCreatePath(this.basePath);
-    await this.writeFile(this.zipFile, Buffer.from(buffer));
+    await FileSystem.checkOrCreatePath(this.basePath);
+    await FileSystem.writeFile(this.zipFile, Buffer.from(buffer));
     console.log("repo saved.");
   }
 
   async fetchRepoStats() {
     console.log("fetching stats: ", this.basePath);
-    return await this.fileStats(this.basePath);
+    return await FileSystem.fileStats(this.basePath);
   }
 
   async unzipRepo() {
     console.log("Unzipping repo: ", this.zipFile);
-    await this.checkOrCreatePath(this.basePath);
+    await FileSystem.checkOrCreatePath(this.basePath);
 
     await new Promise((resolve, reject) => {
       Fs.createReadStream(this.zipFile)
@@ -121,13 +96,13 @@ class StorageService {
   }
 
   async cleanRepo() {
-    await this.removePath(this.basePath + "/.git");
-    await this.removePath(this.basePath + "/.github");
+    await FileSystem.removePath(this.basePath + "/.git");
+    await FileSystem.removePath(this.basePath + "/.github");
   }
 
   async zipRepo() {
     console.log("Zipping repo: ", this.basePath);
-    await this.checkOrCreatePath(this.basePath);
+    await FileSystem.checkOrCreatePath(this.basePath);
     const archive = Archiver("zip", { zlib: { level: 9 } });
     const stream = Fs.createWriteStream(this.zipFile);
 
@@ -141,12 +116,12 @@ class StorageService {
   }
 
   async removeRepo() {
-    await this.removePath(this.basePath);
+    await FileSystem.removePath(this.basePath);
   }
 
   async removeZip() {
     console.log("Removing zip...");
-    await this.removePath(this.zipFile);
+    await FileSystem.removePath(this.zipFile);
   }
 }
 

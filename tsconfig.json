@@ -11,8 +11,8 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": true,
-    "strict": true,
-    "skipLibCheck": false,
+    "strict": false,
+    "skipLibCheck": true,
     "sourceMap": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -25,9 +25,12 @@
     "paths": {
       "src/*": ["./src/*"],
       "tests/*": ["./tests/*"]
-    }
+    },
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+    ]
   },
-  "include": ["src", "tests", "types"],
+  "include": ["src", "tests", "types", "playbooks-tar.config.ts"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

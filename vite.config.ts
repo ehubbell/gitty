@@ -1,4 +1,4 @@
-import path from "path";
+const path = require("path");
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -9,7 +9,7 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "gitto",
+      name: "playbooksTar",
       formats: ["es", "cjs", "umd", "iife"],
       fileName: (format) => `index.${format}.js`,
     },
@@ -21,6 +21,11 @@ export default defineConfig({
           "react-dom": "ReactDOM",
         },
       },
+    },
+  },
+  resolve: {
+    alias: {
+      src: "/src",
     },
   },
 });

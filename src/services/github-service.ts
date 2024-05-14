@@ -14,9 +14,15 @@ class GithubService {
     return new Octokit({ auth: this.token, userAgent: "gitto/v0.0.0" });
   }
 
+  async checkAuth() {
+    const auth = await this.client.auth();
+    console.log("Authenticated: ", auth.tokenType ? true : false);
+  }
+
   // Queries
   async getRepoZip(ownerId: string, repoId: string) {
     try {
+      await this.checkAuth();
       const endpoint = `/repos/${ownerId}/${repoId}/zipball`;
       const response = await this.client.request(`GET ${endpoint}`);
       return { status: response.status, data: response.data };
@@ -27,6 +33,7 @@ class GithubService {
 
   async getRepoVersionZip(ownerId: string, repoId: string, versionId?: string) {
     try {
+      await this.checkAuth();
       const endpoint = `/repos/${ownerId}/${repoId}/zipball/${versionId}`;
       const response = await this.client.request(`GET ${endpoint}`);
       return { status: response.status, data: response.data };
@@ -37,6 +44,7 @@ class GithubService {
 
   async createRepo(ownerId: string, repoId: string) {
     try {
+      await this.checkAuth();
       const endpoint = `/repos/${ownerId}/${repoId}/zipball`;
       const response = await this.client.request(`GET ${endpoint}`);
       return { status: response.status, data: response.data };
