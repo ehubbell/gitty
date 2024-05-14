@@ -62,7 +62,6 @@ export const fetchCommand = async (url: string, options: any) => {
   await storage.saveRepo(zipResponse.data);
   await storage.unzipRepo();
   await storage.cleanRepo();
-  await storage.zipRepo();
   storageSpinner.succeed("Storage complete.");
 
   // Git Step
