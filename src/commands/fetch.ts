@@ -20,6 +20,7 @@ export const fetchCommand = async (url: string, options: any) => {
   const ownerId = paths.split("/")[0];
   const repoId = paths.split("/")[1];
   const nestedPath = paths.split("/").slice(4, paths.length).join("/");
+  const basePath = destination || process.cwd();
 
   const destinations = destination.split("/");
   const formattedName =
@@ -29,41 +30,46 @@ export const fetchCommand = async (url: string, options: any) => {
   // Github Step
   console.log("Fetching repo...");
   const github = new GithubService({ token });
-  const response = version
+  const zipResponse = version
     ? await github.getRepoVersionZip(ownerId, repoId, version)
     : await github.getRepoZip(ownerId, repoId);
-  if (response.status !== 200) {
-    console.log("github: ", response);
-    return response;
-  }
+  if (zipResponse.status !== 200) return console.error("github: ", zipResponse);
 
   // Storage Step
   console.log("Storing repo...");
   const storage = new StorageService({
-    basePath: destination || process.cwd(),
+    basePath,
     ownerId,
     repoId: formattedName,
     nestedPath,
   });
   const valid = await storage.checkEmpty();
-  if (!valid)
-    return console.log("Please clear your destination directory first.");
-  await storage.saveRepo(response.data);
+  if (!valid) return console.error("Please clear your destination directory.");
+  await storage.saveRepo(zipResponse.data);
   await storage.unzipRepo();
   await storage.cleanRepo();
   await storage.zipRepo();
 
   // Git Step
   if (clone) {
-    console.log("Cloning repo...");
-    const git = new GitService({
-      basePath: destination || process.cwd(),
-      token,
-      ownerId: "playbooks-community",
-      repoId: formattedName,
+    console.log("Checking repo...");
+    const repoResponse = await github.getRepo(
+      "playbooks-community",
+      formattedName
+    );
+    if (repoResponse.data) return console.error("Repo already exists");
+
+    console.log("Creating repo...");
+    const orgResponse = await github.createOrgRepo("playbooks-community", {
+      name: formattedName,
+      private: false,
     });
-    await github.createRepo("playbooks-community", formattedName);
-    await git.cloneRepo("playbooks-community", formattedName);
+    if (orgResponse.status !== 200)
+      return console.error("github: ", orgResponse);
+
+    console.log("Cloning repo...");
+    const git = new GitService({ basePath, token });
+    await git.create("playbooks-community", formattedName);
   }
 
   // Cleanup

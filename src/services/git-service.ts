@@ -1,25 +1,17 @@
 const SimpleGit = require("simple-git");
 
+const GITHUB_USER = import.meta.env.VITE_GITHUB_USER;
+const GITHUB_EMAIL = import.meta.env.VITE_GITHUB_EMAIL;
+
 class GitService {
   basePath: string;
-  ownerId: string;
-  repoId: string;
   token: string;
-  versionId?: string;
-  nestedPath?: string;
 
-  constructor(props: {
-    basePath: string;
-    ownerId: string;
-    repoId: string;
-    token: string;
-    versionId?: string;
-    nestedPath?: string;
-  }) {
+  constructor(props: { basePath: string; token: string }) {
     this.basePath = props.basePath;
     this.token = props?.token;
-    this.addConfig("user.name", "playbooks");
-    this.addConfig("user.email", "git@playbooks.xyz");
+    this.addConfig("user.name", GITHUB_USER);
+    this.addConfig("user.email", GITHUB_EMAIL);
   }
 
   /* ----- Computed ----- */
@@ -41,20 +33,22 @@ class GitService {
     );
   }
 
-  cloneUrl(ownerId: string, repoId: string) {
-    return `https://${this.token}@github.com/${ownerId}/${repoId}.git`;
-  }
-
   /* ----- Methods ----- */
-  async cloneRepo(ownerId: string, repoId: string) {
-    const cloneUrl = this.cloneUrl(ownerId, repoId);
+  async create(ownerId: string, repoId: string) {
     return await this.client
       .init()
       .add(".")
       .commit("Playbooks clone")
-      .addRemote("origin", cloneUrl)
+      .addRemote(
+        "origin",
+        `https://${this.token}@github.com/${ownerId}/${repoId}.git`
+      )
       .branch(["-M", "main"])
       .push(["-u", "origin", "main"]);
+  }
+
+  async clone(remoteUrl, localPath) {
+    return await this.client.clone(remoteUrl, localPath);
   }
 
   async fetch(options = {}) {

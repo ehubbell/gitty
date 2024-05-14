@@ -8,7 +8,6 @@ interface StorageService {
   basePath: string;
   ownerId: string;
   repoId: string;
-  versionId?: string;
   nestedPath?: string;
 }
 
@@ -17,13 +16,11 @@ class StorageService {
     basePath: string;
     ownerId: string;
     repoId: string;
-    versionId?: string;
     nestedPath?: string;
   }) {
     this.basePath = props.basePath;
     this.ownerId = props?.ownerId;
     this.repoId = props?.repoId;
-    this.versionId = props?.versionId;
     this.nestedPath = props?.nestedPath;
   }
 
