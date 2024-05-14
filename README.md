@@ -2,6 +2,11 @@
 A simple git tarball CLI for Github repositories and subdirectories.
 
 
+## Prerequisites
+- Node v20.13.1 (for proper unzip)
+- Ora v5.4.1 (for module require)
+
+
 ## Quick Start
 - `npm i gitto -g`
 - `gitto fetch <github_repo_url>`
