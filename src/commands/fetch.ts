@@ -1,19 +1,24 @@
+const ora = require("ora");
 import { GitService } from "src/services/git-service";
 import { GithubService } from "src/services/github-service";
 import { StorageService } from "src/services/storage-service";
+import { timeout } from "src/utils/helpers";
 
 const TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
 export const fetchCommand = async (url: string, options: any) => {
+  const setupSpin = ora("Setting up...").start();
+  await timeout(300);
+
   // Globals
   const token = options.t || options.token || TOKEN;
-  console.log("globals: ", { token });
+  // console.log("globals: ", { token });
 
   // Options
   const clone = options.c || options.clone || false;
   const destination = options.d || options.destination || null;
   const version = options.v || options.version || null;
-  console.log("options: ", { clone, destination, version });
+  // console.log("options: ", { clone, destination, version });
 
   // Path
   const paths = url.split("https://github.com/")[1];
@@ -25,18 +30,26 @@ export const fetchCommand = async (url: string, options: any) => {
   const destinations = destination.split("/");
   const formattedName =
     destinations[destinations.length - 1] || paths.split("/")[paths.length - 1];
-  console.log("url: ", { ownerId, repoId, nestedPath });
+  // console.log("url: ", { ownerId, repoId, nestedPath });
+
+  setupSpin.succeed("Setup complete!");
 
   // Github Step
-  console.log("Fetching repo...");
+  const githubSpinner = ora("Fetching repo...").start();
+  await timeout(300);
   const github = new GithubService({ token });
   const zipResponse = version
     ? await github.getRepoVersionZip(ownerId, repoId, version)
     : await github.getRepoZip(ownerId, repoId);
-  if (zipResponse.status !== 200) return console.error("github: ", zipResponse);
+  if (zipResponse.status !== 200) {
+    githubSpinner.fail("Fetch failed!");
+    return console.error("\ngithub: ", zipResponse);
+  }
+  githubSpinner.succeed("Fetch complete!");
 
   // Storage Step
-  console.log("Storing repo...");
+  const storageSpinner = ora("Storing repo...").start();
+  await timeout(300);
   const storage = new StorageService({
     basePath,
     ownerId,
@@ -44,32 +57,41 @@ export const fetchCommand = async (url: string, options: any) => {
     nestedPath,
   });
   const valid = await storage.checkEmpty();
-  if (!valid) return console.error("Please clear your destination directory.");
+  if (!valid)
+    return storageSpinner.fail("Please clear the destination directory!");
   await storage.saveRepo(zipResponse.data);
   await storage.unzipRepo();
   await storage.cleanRepo();
   await storage.zipRepo();
+  storageSpinner.succeed("Storage complete.");
 
   // Git Step
   if (clone) {
-    console.log("Checking repo...");
+    const cloneSpinner = ora("Checking github...").start();
+    await timeout(300);
     const repoResponse = await github.getRepo(
       "playbooks-community",
       formattedName
     );
-    if (repoResponse.data) return console.error("Repo already exists");
+    if (repoResponse.status !== 200) {
+      cloneSpinner.fail("Repo already exists!");
+      return console.error("\ngithub: ", repoResponse);
+    }
 
-    console.log("Creating repo...");
+    cloneSpinner.text = "Creating repo...";
     const orgResponse = await github.createOrgRepo("playbooks-community", {
       name: formattedName,
       private: false,
     });
-    if (orgResponse.status !== 200)
-      return console.error("github: ", orgResponse);
+    if (orgResponse.status !== 200) {
+      cloneSpinner.fail("Create failed!");
+      return console.error("\ngithub: ", orgResponse);
+    }
 
-    console.log("Cloning repo...");
+    cloneSpinner.text = "Cloning repo...";
     const git = new GitService({ basePath, token });
     await git.create("playbooks-community", formattedName);
+    cloneSpinner.succeed("Clone succeeded!\n");
   }
 
   // Cleanup

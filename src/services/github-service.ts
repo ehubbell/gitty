@@ -7,7 +7,6 @@ interface GithubService {
 class GithubService {
   constructor(props: { token: string }) {
     this.token = props?.token;
-    console.log("Authenticated: ", this.token ? true : false);
   }
 
   /* ----- Computes ----- */
