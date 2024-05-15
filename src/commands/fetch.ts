@@ -62,7 +62,7 @@ export const fetchCommand = async (url: string, options: any) => {
   await storage.saveRepo(zipResponse.data);
   await storage.unzipRepo();
   await storage.cleanRepo();
-  storageSpinner.succeed("Storage complete.");
+  storageSpinner.succeed("Storage complete!");
 
   // Git Step
   if (clone) {
@@ -72,7 +72,7 @@ export const fetchCommand = async (url: string, options: any) => {
       "playbooks-community",
       formattedName
     );
-    if (repoResponse.status !== 200) {
+    if (repoResponse.status !== 404) {
       cloneSpinner.fail("Repo already exists!");
       return console.error("\ngithub: ", repoResponse);
     }
@@ -82,7 +82,7 @@ export const fetchCommand = async (url: string, options: any) => {
       name: formattedName,
       private: false,
     });
-    if (orgResponse.status !== 200) {
+    if (orgResponse.status !== 201) {
       cloneSpinner.fail("Create failed!");
       return console.error("\ngithub: ", orgResponse);
     }
@@ -90,10 +90,10 @@ export const fetchCommand = async (url: string, options: any) => {
     cloneSpinner.text = "Cloning repo...";
     const git = new GitService({ basePath, token });
     await git.create("playbooks-community", formattedName);
-    cloneSpinner.succeed("Clone succeeded!\n");
+    cloneSpinner.succeed("Clone complete!");
   }
 
   // Cleanup
   await storage.removeZip();
-  console.log("Done.");
+  console.log("You are all done.");
 };
