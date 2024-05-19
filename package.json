@@ -1,7 +1,7 @@
 {
-  "name": "playbooks-tar",
+  "name": "playbooks-transfer",
   "version": "1.0.0",
-  "description": "A simple git tarball CLI for Github repositories and subdirectories.",
+  "description": "A simple CLI that will fetch a Github repository or subdirectory and transfer it to your account.",
   "license": "ISC",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
