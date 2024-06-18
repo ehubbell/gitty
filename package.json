@@ -48,16 +48,12 @@
     "docs:start": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "preversion": "npm run wipe",
-    "version": "npm run deploy",
     "predeploy": "npm run build",
     "deploy": "npm publish",
-    "postdeploy": "git add . && git push --tags",
+    "postdeploy": "npm run git",
     "pregit": "git add .",
     "git": "git push --tags",
-    "postgit": "npm run wipe",
-    "test": "jest",
-    "wipe": "rm -rf ./dist"
+    "test": "jest"
   },
   "dependencies": {
     "@octokit/core": "^6.1.2",
