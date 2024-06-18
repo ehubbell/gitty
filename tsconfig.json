@@ -30,7 +30,7 @@
       { "transform": "typescript-transform-paths" },
     ]
   },
-  "include": ["src", "tests", "types", "playbooks-tar.config.ts"],
+  "include": ["src", "tests", "types"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

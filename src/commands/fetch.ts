@@ -1,4 +1,5 @@
 const ora = require('ora');
+const os = require('os');
 import { ConfigService } from 'src/services/config-service';
 import { GitService } from 'src/services/git-service';
 import { GithubService } from 'src/services/github-service';
@@ -11,7 +12,7 @@ export const fetchCommand = async (url: string, options: any) => {
 		// Options
 		const clone = options.c || options.clone || null;
 		const destination = options.d || options.destination || null;
-		const environment = options.e || options.env || '~/.pbconfig';
+		const environment = options.e || options.env || `${os.homedir()}/.pbconfig`;
 		const version = options.v || options.version || null;
 		Logger.log('options: ', { clone, destination, environment, version });
 
@@ -24,6 +25,7 @@ export const fetchCommand = async (url: string, options: any) => {
 		if (!configValid) return configSpinner.fail('Please provide a valid config file.');
 		const config = await configService.readContents();
 		Logger.log('config: ', config);
+		process.exit();
 
 		// Github
 		const githubPath = url.includes('github.com') ? url.split('https://github.com/')[1] : url;

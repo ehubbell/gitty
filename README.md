@@ -34,6 +34,11 @@ Playbooks-transfer will read the following variables from your config file and u
 ## Development
 - npm start
 - node playbooks-transfer github_repo -d ~/user/file/path
+- ...or...
+- npm run build
+- npm pack
+- npm install ./local-npm-package-name
+- playbooks-transfer github_repo --destination ~/user/file/path
 
 
 ## Author
