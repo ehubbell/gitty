@@ -26,11 +26,13 @@ export const fetchCommand = async (url: string, options: any) => {
 		Logger.log('config: ', config);
 
 		// Github
-		const githubPath = url.split('https://github.com/')[1];
+		const githubPath = url.includes('github.com') ? url.split('https://github.com/')[1] : url;
 		const githubFragments = githubPath.split('/');
 		const ownerId = githubFragments[0];
 		const repoId = githubFragments[1];
-		const nestedPath = githubFragments.slice(4, githubPath.length).join('/');
+		const nestedPath = githubFragments.includes('tree')
+			? githubFragments.slice(4, githubPath.length).join('/')
+			: githubFragments.slice(3, githubPath.length).join('/');
 		Logger.log('url: ', { ownerId, repoId, nestedPath });
 
 		// Destination

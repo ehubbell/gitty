@@ -1,5 +1,5 @@
 ## Overview
-A simple git tarball CLI for Github repositories and subdirectories.
+A simple CLI that will fetch, store, and clone Github repositories and subdirectories.
 
 
 ## Prerequisites
@@ -8,7 +8,7 @@ A simple git tarball CLI for Github repositories and subdirectories.
 
 
 ## Quick Start
-- `npm i playbooks-transfer -g`
+- `npm i -g @playbooks-xyz/playbooks-transfer`
 - `playbooks-transfer fetch <github_repo_url>`
 - `playbooks-transfer fetch <github_repo_url> --directory ~/repos`
 
@@ -36,15 +36,9 @@ Playbooks-transfer will read the following variables from your config file and u
 - node playbooks-transfer github_repo -d ~/user/file/path
 
 
-## Deploy
-- npm run build
-- npm version [major | minor | patch]
-- npm run deploy
-
-
 ## Author
-- Eric Hubbell
-- eric@erichubbell.com
+- Playbooks XYZ
+- support@playbooks.xyz
 
 
 ## Inspiration
@@ -53,4 +47,4 @@ Playbooks-transfer will read the following variables from your config file and u
 
 
 ## Contributions
-- Please open an Issue describing the PR you want to submit so we can engage briefly before you start work.
+- Please open an issue describing the PR you want to submit before starting work.
