@@ -33,7 +33,7 @@ export const fetchCommand = async (url: string, options: any) => {
 		const repoId = githubFragments[1];
 		const nestedPath = githubFragments.includes('tree')
 			? githubFragments.slice(4, githubPath.length).join('/')
-			: githubFragments.slice(3, githubPath.length).join('/');
+			: githubFragments.slice(2, githubPath.length).join('/');
 		Logger.log('url: ', { ownerId, repoId, nestedPath });
 
 		// Destination
