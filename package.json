@@ -51,7 +51,6 @@
     "docs:preview": "vitepress preview docs",
     "predeploy": "npm run build",
     "deploy": "npm publish",
-    "postdeploy": "npm run git",
     "pregit": "git add .",
     "git": "git push --tags",
     "test": "jest"
