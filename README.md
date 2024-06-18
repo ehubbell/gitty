@@ -9,8 +9,8 @@ A simple CLI that will fetch, store, and clone Github repositories and subdirect
 
 ## Quick Start
 - `npm i -g @playbooks-xyz/playbooks-transfer`
-- `playbooks-transfer fetch <github_repo_url>`
-- `playbooks-transfer fetch <github_repo_url> --directory ~/repos`
+- `playbooks-transfer <repo_url>`
+- `playbooks-transfer <repo_url> --directory ~/repos`
 
 ## Description
 The commands above will install `playbooks-transfer` to your local machine and make the `playbooks-transfer` command globally available.
@@ -33,12 +33,12 @@ Playbooks-transfer will read the following variables from your config file and u
 
 ## Development
 - npm start
-- node playbooks-transfer github_repo -d ~/user/file/path
+- node playbooks-transfer repo_url -d ~/user/file/path
 - ...or...
 - npm run build
 - npm pack
-- npm install ./local-npm-package-name
-- playbooks-transfer github_repo --destination ~/user/file/path
+- npm install ./npm-package-name.tgz
+- playbooks-transfer repo_url --destination ~/user/file/path
 
 
 ## Author
