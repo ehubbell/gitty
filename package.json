@@ -15,7 +15,9 @@
     "email": "support@playbooks.xyz",
     "url": "https://github.com/playbooks-xyz"
   },
-  "repository": "https://github.com/playbooks-xyz/playbooks-transfer",
+  "repository": {
+    "url": "https://github.com/playbooks-xyz/playbooks-transfer"
+  },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -46,7 +48,16 @@
     "docs:start": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
-    "test": "jest"
+    "preversion": "npm run wipe",
+    "version": "npm run deploy",
+    "predeploy": "npm run build",
+    "deploy": "npm publish",
+    "postdeploy": "git add . && git push --tags",
+    "pregit": "git add .",
+    "git": "git push --tags",
+    "postgit": "npm run wipe",
+    "test": "jest",
+    "wipe": "rm -rf ./dist"
   },
   "dependencies": {
     "@octokit/core": "^6.1.2",
