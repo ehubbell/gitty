@@ -1,6 +1,6 @@
 {
   "name": "playbooks-transfer",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A simple CLI that will fetch a Github repository or subdirectory and transfer it to your account.",
   "homepage": "https://github.com/playbooks-xyz/playbooks-transfer",
   "license": "ISC",
