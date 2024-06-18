@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "vite build --watch",
+    "start": "vite build --watch --sourcemap --minify false",
     "build": "vite build",
     "build:typescript": "tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts",
     "lint": "eslint src",

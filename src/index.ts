@@ -13,8 +13,8 @@ const cli = sade('playbooks-transfer <url>', true)
 	.option('-v, --version', 'Specify tarball version (optional).')
 	.example('playbooks-transfer vercel/vercel')
 	.example('playbooks-transfer vercel/vercel/examples/angular')
-	.example('playbooks-transfer vercel/vercel/examples/angular --directory ~/storage')
-	.example('playbooks-transfer vercel/vercel/examples/angular --directory ~/storage --clone playbooks-community')
+	.example('playbooks-transfer vercel/vercel/examples/angular --destination ~/storage')
+	.example('playbooks-transfer vercel/vercel/examples/angular --destination ~/storage --clone playbooks-community')
 	.action(fetchCommand);
 
 cli.parse(process.argv);

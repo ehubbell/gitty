@@ -6,22 +6,20 @@ import * as FileSystem from 'src/utils/file-system';
 
 interface StorageService {
 	basePath: string;
-	ownerId: string;
-	repoId: string;
+	formattedName: string;
 	nestedPath?: string;
 }
 
 class StorageService {
-	constructor(props: { basePath: string; ownerId: string; repoId: string; nestedPath?: string }) {
+	constructor(props: { basePath: string; formattedName: string; nestedPath?: string }) {
 		this.basePath = props.basePath;
-		this.ownerId = props?.ownerId;
-		this.repoId = props?.repoId;
+		this.formattedName = props?.formattedName;
 		this.nestedPath = props?.nestedPath;
 	}
 
 	/* ----- Computed ----- */
 	get zipFile() {
-		return `${this.basePath}/${this.repoId}.zip`;
+		return `${this.basePath}/${this.formattedName}.zip`;
 	}
 
 	/* ----- Methods ----- */
@@ -32,9 +30,10 @@ class StorageService {
 			const path = await Fs.promises.stat(this.basePath);
 			if (path.isDirectory()) {
 				const entries = await Fs.readdir(this.basePath);
+				console.log('entries: ', entries);
 				return entries.length > 0 ? false : true;
 			}
-			return false;
+			return true;
 		}
 		return true;
 	}
