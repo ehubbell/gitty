@@ -1,27 +1,29 @@
 const ora = require('ora');
+import { ConfigService } from 'src/services/config-service';
 import { GitService } from 'src/services/git-service';
 import { GithubService } from 'src/services/github-service';
 import { StorageService } from 'src/services/storage-service';
 import { timeout } from 'src/utils/helpers';
 import * as Logger from 'src/utils/logger';
 
-const env = import.meta.env.VITE_NODE_ENV;
-const TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
-
 export const fetchCommand = async (url: string, options: any) => {
 	try {
-		const setupSpinner = ora('Setting up...\n').start();
-		await timeout(300);
-
-		// Globals
-		const token = options.t || options.token || TOKEN;
-		Logger.log('globals: ', { env, token });
-
 		// Options
 		const clone = options.c || options.clone || null;
 		const destination = options.d || options.destination || null;
+		const environment = options.e || options.env || process.cwd() + '/.pbconfig';
 		const version = options.v || options.version || null;
-		Logger.log('options: ', { clone, destination, version });
+		Logger.log('options: ', { clone, destination, environment, version });
+
+		// Config
+		const configService = new ConfigService({ basePath: environment });
+		const configSpinner = ora('Setting up...\n').start();
+		await timeout(300);
+
+		const configValid = await configService.checkEmpty();
+		if (!configValid) return configSpinner.fail('Please provide a valid config file.');
+		const config = await configService.readContents();
+		Logger.log('config: ', config);
 
 		// Github
 		const githubPath = url.split('https://github.com/')[1];
@@ -37,18 +39,18 @@ export const fetchCommand = async (url: string, options: any) => {
 		const formattedName = destination
 			? destinationFragments[destinationFragments.length - 1]
 			: githubFragments[githubFragments.length - 1];
-
 		Logger.log('destination: ', { basePath, formattedName });
 
-		setupSpinner.succeed('Setup complete!');
+		configSpinner.succeed('\nSetup complete!');
 
 		// Github Step
+		const githubService = new GithubService({ token: config.GITHUB_TOKEN });
 		const githubSpinner = ora('Fetching repo...\n').start();
 		await timeout(300);
-		const github = new GithubService({ token });
+
 		const zipResponse = version
-			? await github.getRepoVersionZip(ownerId, repoId, version)
-			: await github.getRepoZip(ownerId, repoId);
+			? await githubService.getRepoVersionZip(ownerId, repoId, version)
+			: await githubService.getRepoZip(ownerId, repoId);
 		if (zipResponse.status !== 200) {
 			githubSpinner.fail('Fetch failed!');
 			return Logger.error('\ngithub: ', zipResponse);
@@ -56,28 +58,29 @@ export const fetchCommand = async (url: string, options: any) => {
 		githubSpinner.succeed('Fetch complete!');
 
 		// Storage Step
+		const storageService = new StorageService({ basePath, formattedName, nestedPath });
 		const storageSpinner = ora('Storing repo...\n').start();
 		await timeout(300);
-		const storage = new StorageService({ basePath, formattedName, nestedPath });
-		const valid = await storage.checkEmpty();
-		if (!valid) return storageSpinner.fail('Please clear the destination directory!');
-		await storage.saveRepo(zipResponse.data);
-		await storage.unzipRepo();
-		await storage.cleanRepo();
+
+		const storageValid = await storageService.checkEmpty();
+		if (!storageValid) return storageSpinner.fail('Please clear the destination directory!');
+		await storageService.saveRepo(zipResponse.data);
+		await storageService.unzipRepo();
+		await storageService.cleanRepo();
 		storageSpinner.succeed('Storage complete!');
 
 		// Clone Step
 		if (clone) {
 			const cloneSpinner = ora('Checking github...\n').start();
 			await timeout(300);
-			const repoResponse = await github.getRepo(clone, formattedName);
+			const repoResponse = await githubService.getRepo(clone, formattedName);
 			if (repoResponse.status !== 404) {
 				cloneSpinner.fail('Repo already exists!');
 				return Logger.error('\ngithub: ', repoResponse);
 			}
 
 			cloneSpinner.text = 'Creating repo...';
-			const orgResponse = await github.createOrgRepo(clone, {
+			const orgResponse = await githubService.createOrgRepo(clone, {
 				name: formattedName,
 				private: false,
 			});
@@ -87,13 +90,13 @@ export const fetchCommand = async (url: string, options: any) => {
 			}
 
 			cloneSpinner.text = 'Cloning repo...';
-			const git = new GitService({ basePath, token });
-			await git.create(clone, formattedName);
+			const gitService = new GitService({ basePath, token: config.GITHUB_TOKEN });
+			await gitService.create(clone, formattedName);
 			cloneSpinner.succeed('Clone complete!');
 		}
 
 		// Cleanup
-		await storage.removeZip();
+		await storageService.removeZip();
 		Logger.log('You are all done.');
 	} catch (e) {
 		Logger.log(e);

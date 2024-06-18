@@ -1,7 +1,8 @@
 {
   "name": "playbooks-transfer",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "A simple CLI that will fetch a Github repository or subdirectory and transfer it to your account.",
+  "homepage": "https://github.com/playbooks-xyz/playbooks-transfer",
   "license": "ISC",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -9,8 +10,32 @@
   "files": [
     "dist"
   ],
+  "author": {
+    "name": "Playbooks",
+    "email": "support@playbooks.xyz",
+    "url": "https://github.com/playbooks-xyz"
+  },
+  "repository": "https://github.com/playbooks-xyz/playbooks-transfer",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "bugs": {
+    "url": "https://github.com/playbooks-xyz/playbooks-transfer/issues"
+  },
+  "keywords": [
+    "git",
+    "git download",
+    "git tarball",
+    "git transfer",
+    "git unzip",
+    "playbooks",
+    "playbooks download",
+    "playbooks tarball",
+    "playbooks transfer",
+    "playbooks unzip"
+  ],
   "scripts": {
-    "start": "vite build --watch --sourcemap --minify false",
+    "start": "vite build --mode development --watch --sourcemap --minify false",
     "build": "vite build",
     "build:typescript": "tsc && vite build && dts-bundle-generator --config ./dts-bundle-generator.config.ts",
     "lint": "eslint src",

@@ -2,10 +2,10 @@ const errorStyles = 'color: crimson';
 const infoStyles = 'color: cadetblue';
 const successStyles = 'color: aquamarine';
 
-const env = import.meta.env.VITE_NODE_ENV;
+const mode = import.meta.env.MODE;
 
 export const log = (title, ...data) => {
-	if (env == 'production') return;
+	if (mode == 'production') return;
 	return console.log(title, ...data);
 };
 
