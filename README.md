@@ -30,15 +30,16 @@ Playbooks-transfer will read the following variables from your config file and u
 - GITHUB_TOKEN
 - DIRECTORY
 
+
 ## Development
 - npm start
 - node playbooks-transfer github_repo -d ~/user/file/path
+
 
 ## Deploy
 - npm run build
 - npm version [major | minor | patch]
 - npm run deploy
-
 
 
 ## Author

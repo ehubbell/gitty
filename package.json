@@ -1,12 +1,13 @@
 {
-  "name": "playbooks-transfer",
-  "version": "0.0.1",
+  "name": "@playbooks-xyz/playbooks-transfer",
+  "version": "0.0.0",
   "description": "A simple CLI that will fetch a Github repository or subdirectory and transfer it to your account.",
   "homepage": "https://github.com/playbooks-xyz/playbooks-transfer",
   "license": "ISC",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
+  "private": true,
   "files": [
     "dist"
   ],
@@ -16,7 +17,8 @@
     "url": "https://github.com/playbooks-xyz"
   },
   "repository": {
-    "url": "https://github.com/playbooks-xyz/playbooks-transfer"
+    "type": "git",
+    "url": "https://github.com/playbooks-xyz/playbooks-transfer.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
