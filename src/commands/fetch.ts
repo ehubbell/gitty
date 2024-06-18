@@ -11,7 +11,7 @@ export const fetchCommand = async (url: string, options: any) => {
 		// Options
 		const clone = options.c || options.clone || null;
 		const destination = options.d || options.destination || null;
-		const environment = options.e || options.env || process.cwd() + '/.pbconfig';
+		const environment = options.e || options.env || '~/.pbconfig';
 		const version = options.v || options.version || null;
 		Logger.log('options: ', { clone, destination, environment, version });
 
