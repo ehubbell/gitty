@@ -25,7 +25,6 @@ export const fetchCommand = async (url: string, options: any) => {
 		if (!configValid) return configSpinner.fail('Please provide a valid config file.');
 		const config = await configService.readContents();
 		Logger.log('config: ', config);
-		process.exit();
 
 		// Github
 		const githubPath = url.includes('github.com') ? url.split('https://github.com/')[1] : url;
