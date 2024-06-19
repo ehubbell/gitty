@@ -34,7 +34,9 @@ Playbooks-transfer will read the following variables from your config file and u
 ## Development
 - npm start
 - node playbooks-transfer repo_url -d ~/user/file/path
-- ...or...
+
+
+## Testing
 - npm run build
 - npm pack
 - npm install ./npm-package-name.tgz

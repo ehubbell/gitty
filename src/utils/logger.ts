@@ -1,6 +1,4 @@
-const errorStyles = 'color: crimson';
-const infoStyles = 'color: cadetblue';
-const successStyles = 'color: aquamarine';
+import chalk from 'chalk';
 
 const mode = import.meta.env.MODE;
 
@@ -10,19 +8,23 @@ export const log = (title, ...data) => {
 };
 
 export const debug = (title, ...data) => {
-	return console.debug(`%c${title}`, infoStyles, ...data);
+	return console.log(chalk.red(`${title} :`, ...data));
 };
 
 export const info = (title, ...data) => {
-	return console.info(`%c${title}`, successStyles, ...data);
+	return console.log(chalk.blue(`${title} :`, ...data));
 };
 
 export const warn = (title, ...data) => {
-	return console.warn(`%c${title}`, errorStyles, ...data);
+	return console.log(chalk.yellow(`${title} :`, ...data));
+};
+
+export const success = (title, ...data) => {
+	return console.log(chalk.green(`${title} :`, ...data));
 };
 
 export const error = (title, ...data) => {
-	return console.error(`%c${title}`, errorStyles, ...data);
+	return console.log(chalk.red(`${title} :`, ...data));
 };
 
 // Docs:
