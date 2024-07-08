@@ -1,5 +1,4 @@
 const ora = require('ora');
-const os = require('os');
 import { ConfigService } from 'src/services/config-service';
 import { GitService } from 'src/services/git-service';
 import { GithubService } from 'src/services/github-service';
@@ -10,11 +9,11 @@ import * as Logger from 'src/utils/logger';
 export const fetchCommand = async (url: string, options: any) => {
 	try {
 		// Options
+		const environment = options.e || options.env;
 		const clone = options.c || options.clone || null;
 		const destination = options.d || options.destination || null;
-		const environment = options.e || options.env || `${os.homedir()}/.pbconfig`;
 		const version = options.v || options.version || null;
-		Logger.log('options: ', { clone, destination, environment, version });
+		Logger.log('options: ', { environment, clone, destination, version });
 
 		// Config
 		const configService = new ConfigService({ basePath: environment });

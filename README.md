@@ -36,6 +36,13 @@ Playbooks-transfer will read the following variables from your config file and u
 - node playbooks-transfer repo_url -d ~/user/file/path
 
 
+## Deploy
+- npm build
+- npm version [major | minor | patch]
+- npm publish
+- git push --tags
+
+
 ## Testing
 - npm run build
 - npm pack

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const os = require('os');
 const sade = require('sade');
 import { fetchCommand } from 'src/commands/fetch';
 import { version } from '../package.json';
@@ -9,7 +10,7 @@ const cli = sade('playbooks-transfer <url>', true)
 	.describe('Fetch a Github repository or subdirectory and transfer it to your Github.')
 	.option('-c, --clone', 'Clone to Github user / org after download is complete.')
 	.option('-d, --destination', 'Path to destination directory.')
-	.option('-e, --env', 'Path to environment file')
+	.option('-e, --env', 'Path to environment file', `${os.homedir()}/.playbooksrc`)
 	.option('-v, --version', 'Specify tarball version (optional).')
 	.example('playbooks-transfer vercel/vercel')
 	.example('playbooks-transfer https://github.com/vercel/vercel')
