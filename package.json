@@ -1,5 +1,5 @@
 {
-  "name": "@playbooks-xyz/transfer",
+  "name": "@playbooks/transfer",
   "description": "A simple CLI that will fetch, store, and clone Github repositories.",
   "homepage": "https://github.com/playbooks-xyz/playbooks-transfer",
   "version": "0.1.2",
@@ -21,9 +21,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/playbooks-xyz/playbooks-transfer.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   },
   "bugs": {
     "url": "https://github.com/playbooks-xyz/playbooks-transfer/issues"
