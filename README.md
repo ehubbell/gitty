@@ -8,7 +8,7 @@ A simple CLI that will fetch, store, and clone Github repositories and subdirect
 
 
 ## Quick Start
-- `npm i -g @playbooks-xyz/playbooks-transfer`
+- `npm i -g @playbooks-xyz/transfer`
 - `playbooks-transfer <repo_url>`
 - `playbooks-transfer <repo_url> --directory ~/repos`
 
