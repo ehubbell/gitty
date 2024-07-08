@@ -2,7 +2,7 @@
   "name": "@playbooks/transfer",
   "description": "A simple CLI that will fetch, store, and clone Github repositories.",
   "homepage": "https://github.com/playbooks-xyz/playbooks-transfer",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "license": "ISC",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
