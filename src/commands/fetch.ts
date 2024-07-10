@@ -99,7 +99,6 @@ export const fetchCommand = async (url: string, options: any) => {
 
 		// Cleanup
 		await storageService.removeZip();
-		Logger.info('You are all done.');
 	} catch (e) {
 		Logger.log(e);
 		Logger.error('Transfer failed:', e);

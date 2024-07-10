@@ -7,7 +7,7 @@ import { version } from '../package.json';
 
 const cli = sade('playbooks-transfer <url>', true)
 	.version(version)
-	.describe('Fetch a Github repository or subdirectory and transfer it to your Github.')
+	.describe('Fetch, store, and clone  Github repositories.')
 	.option('-c, --clone', 'Clone to Github user / org after download is complete.')
 	.option('-d, --destination', 'Path to destination directory.')
 	.option('-e, --env', 'Path to environment file', `${os.homedir()}/.playbooksrc`)

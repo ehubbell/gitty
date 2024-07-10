@@ -1,16 +1,14 @@
 const path = require('path');
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
 export default defineConfig({
 	base: './',
-	plugins: [react()],
 	build: {
 		sourcemap: true,
 		lib: {
 			entry: path.resolve(__dirname, 'src/index.ts'),
 			name: 'playbooksTransfer',
-			formats: ['es', 'cjs', 'umd', 'iife'],
+			formats: ['es', 'cjs'],
 			fileName: format => `index.${format}.js`,
 		},
 		rollupOptions: {
