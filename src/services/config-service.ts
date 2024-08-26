@@ -25,13 +25,15 @@ class ConfigService {
 	async readContents() {
 		const contents = await FileSystem.readFile(this.basePath);
 		const records = contents.split('\n');
-		return records
+		const formattedRecords = {};
+		records
 			.filter(v => v.length > 0)
 			.map(record => {
 				const key = record.split('=')[0];
 				const value = record.split('=')[1];
-				return { key, value };
+				return (formattedRecords[key] = value);
 			});
+		return formattedRecords;
 	}
 }
 

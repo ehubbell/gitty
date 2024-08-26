@@ -1,4 +1,5 @@
-const SimpleGit = require('simple-git');
+const { simpleGit, GitConfigScope, ResetMode } = require('simple-git');
+import * as logger from 'src/utils/logger';
 
 interface GitService {
 	basePath: string;
@@ -8,14 +9,14 @@ interface GitService {
 class GitService {
 	constructor(props: { basePath: string; token: string }) {
 		this.basePath = props.basePath;
-		this.token = props?.token;
+		this.token = props.token;
 		this.addConfig('user.name', 'playbooks');
 		this.addConfig('user.email', 'admin@playbooks.xyz');
 	}
 
 	/* ----- Computed ----- */
 	get client() {
-		return SimpleGit({
+		return simpleGit({
 			baseDir: this.basePath,
 			binary: 'git',
 			maxConcurrentProcesses: 6,
@@ -24,7 +25,7 @@ class GitService {
 
 	/* ----- Helpers ----- */
 	addConfig(key: string, value: string) {
-		return this.client.addConfig(key, value, false, SimpleGit.GitConfigScope.global);
+		return this.client.addConfig(key, value, false, GitConfigScope.global);
 	}
 
 	/* ----- Methods ----- */
@@ -32,7 +33,7 @@ class GitService {
 		return await this.client
 			.init()
 			.add('.')
-			.commit('Playbooks clone')
+			.commit('Transfer clone')
 			.addRemote('origin', `https://${this.token}@github.com/${ownerId}/${repoId}.git`)
 			.branch(['-M', 'main'])
 			.push(['-u', 'origin', 'main']);
@@ -59,7 +60,7 @@ class GitService {
 	}
 
 	async resetRepo(branch = 'origin/main') {
-		await this.client.reset(SimpleGit.ResetMode.HARD, { branch: null });
+		await this.client.reset(ResetMode.HARD, { branch: null });
 	}
 }
 

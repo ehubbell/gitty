@@ -13,12 +13,13 @@ A simple CLI that will fetch, store, and clone Github repositories and subdirect
 - `playbooks-transfer <repo_url> --directory ~/repos`
 
 ## Description
-The commands above will install `playbooks-transfer` to your local machine and make the `playbooks-transfer` command globally available.
+The commands above will install `playbooks-transfer` to your local machine and make the `transfer` command globally available.
 You can then download any public Github repository or subdirectory per the quick start instructions.
 
 
 ## How it works
-Gitto downloads a copy of the main repository's tarball to your local machine, unzips the file, formats it, and then store the formatted version in your current working directory. Alternatively, you can pass in a `--directory` parameter indicating where you want to install the repository. As part of the formatting, we automatically remove the `.git` directory and the initial download so you'll start with a clean working repository.
+The `transfer` commands downloads a copy of the main repository's tarball, unzips the file, formats it, and then stores the formatted version in your current working directory. Alternatively, you can pass in a `--directory` parameter indicating where you want to install the repository relative to the current directory.
+As part of the formatting, we automatically remove the `.git` directory and the tarball file so you'll start with a clean working repository.
 
 
 ## Why we built this

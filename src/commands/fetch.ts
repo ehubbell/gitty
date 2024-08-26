@@ -22,7 +22,7 @@ export const fetchCommand = async (url: string, options: any) => {
 
 		const configValid = await configService.checkEmpty();
 		if (!configValid) return configSpinner.fail('Please provide a valid config file.');
-		const config = await configService.readContents();
+		const config: any = await configService.readContents();
 		Logger.log('config: ', config);
 
 		// Github
@@ -69,6 +69,7 @@ export const fetchCommand = async (url: string, options: any) => {
 		await storageService.saveRepo(zipResponse.data);
 		await storageService.unzipRepo();
 		await storageService.cleanRepo();
+		await storageService.removeZip();
 		storageSpinner.succeed('Storage complete!');
 
 		// Clone Step
@@ -78,17 +79,17 @@ export const fetchCommand = async (url: string, options: any) => {
 			const repoResponse = await githubService.getRepo(clone, formattedName);
 			if (repoResponse.status !== 404) {
 				cloneSpinner.fail('Repo already exists!');
-				return Logger.error('github: ', repoResponse);
+				return Logger.error('github: ', JSON.stringify(repoResponse));
 			}
 
 			cloneSpinner.text = 'Creating repo...';
-			const orgResponse = await githubService.createOrgRepo(clone, {
+			const createResponse = await githubService.createRepo(clone, {
 				name: formattedName,
 				private: false,
 			});
-			if (orgResponse.status !== 201) {
+			if (createResponse.status !== 201) {
 				cloneSpinner.fail('Create failed!');
-				return Logger.error('github: ', orgResponse);
+				return Logger.error('github: ', JSON.stringify(createResponse));
 			}
 
 			cloneSpinner.text = 'Cloning repo...';
@@ -96,9 +97,6 @@ export const fetchCommand = async (url: string, options: any) => {
 			await gitService.create(clone, formattedName);
 			cloneSpinner.succeed('Clone complete!');
 		}
-
-		// Cleanup
-		await storageService.removeZip();
 	} catch (e) {
 		Logger.log(e);
 		Logger.error('Transfer failed:', e);
