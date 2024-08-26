@@ -8,13 +8,14 @@ A simple CLI that will fetch, store, and clone Github repositories and subdirect
 
 
 ## Quick Start
-- `npm i -g @playbooks-xyz/transfer`
-- `playbooks-transfer <repo_url>`
-- `playbooks-transfer <repo_url> --directory ~/repos`
+- `npm install -g @playbooks-xyz/transfer`
+- `transfer <repo_url>`
+- `transfer <repo_url> --directory ~/playgrounds/repo-name`
+- `transfer <repo_url> --directory ~/playgrounds/repo-name --clone ehubbell`
 
 ## Description
-The commands above will install `playbooks-transfer` to your local machine and make the `transfer` command globally available.
-You can then download any public Github repository or subdirectory per the quick start instructions.
+The commands above will install the SDK to your local machine and make the `transfer` command globally available.
+You can then download any Github repository or subdirectory (you have access to) per the quick start instructions.
 
 
 ## How it works
@@ -27,14 +28,21 @@ We ran into issues using Degit on some nested directories and felt like their CL
 
 
 ## Config
-Playbooks-transfer will read the following variables from your config file and use them as your defaults. You can override the location of your config file by passing `-c path/to/config` in any command.
-- GITHUB_TOKEN
-- DIRECTORY
+Playbooks-transfer will read the following variables from your config file:
 
+```
+~/.transferrc
+
+GITHUB_USER=****
+GITHUB_EMAIL=****
+GITHUB_TOKEN=****
+
+```
 
 ## Development
-- npm start
-- node playbooks-transfer repo_url -d ~/user/file/path
+- run npm start in terminal tab
+- then cd to the previous directory from a new terminal
+- `node playbooks-transfer repo_url -d ~/user/file/path`
 
 
 ## Deploy
