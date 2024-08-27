@@ -11,9 +11,9 @@ export const fetchCommand = async (url: string, options: any) => {
 		// Options
 		const environment = options.e || options.env;
 		const clone = options.c || options.clone || null;
-		const destination = options.d || options.destination || null;
+		const path = options.p || options.path || null;
 		const version = options.v || options.version || null;
-		Logger.log('options: ', { environment, clone, destination, version });
+		Logger.log('options: ', { environment, clone, path, version });
 
 		// Config
 		const configService = new ConfigService({ basePath: environment });
@@ -36,9 +36,9 @@ export const fetchCommand = async (url: string, options: any) => {
 		Logger.log('url: ', { ownerId, repoId, nestedPath });
 
 		// Destination
-		const basePath = destination || process.cwd();
-		const destinationFragments = destination?.split('/');
-		const formattedName = destination
+		const basePath = path || process.cwd();
+		const destinationFragments = path?.split('/');
+		const formattedName = path
 			? destinationFragments[destinationFragments.length - 1]
 			: githubFragments[githubFragments.length - 1];
 		Logger.log('destination: ', { basePath, formattedName });
