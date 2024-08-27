@@ -25,7 +25,7 @@ class GitService {
 
 	/* ----- Helpers ----- */
 	addConfig(key: string, value: string) {
-		return this.client.addConfig(key, value, false, GitConfigScope.global);
+		return this.client.addConfig(key, value, false, GitConfigScope.local);
 	}
 
 	/* ----- Methods ----- */
