@@ -45,7 +45,7 @@ GITHUB_TOKEN=****
 - npm build
 - npm version [major | minor | patch]
 - npm publish
-- git push --tags
+- npm run git
 
 
 ## Testing
