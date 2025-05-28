@@ -1,0 +1,23 @@
+{
+	"autorun": false,
+	"autokill": true,
+	"terminals": [
+		{
+			"name": "project-terminal",
+			"focus": true,
+			"execute": false,
+			"command": "npm start",
+			"recycle": true
+		},
+		{
+			"name": "project-terminal-alt",
+			"open": true,
+			"recycle": true
+		},
+		{
+			"name": "zsh",
+			"open": true,
+			"recycle": true
+		}
+	]
+}

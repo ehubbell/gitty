@@ -6,7 +6,7 @@ import { StorageService } from 'src/services/storage-service';
 import { timeout } from 'src/utils/helpers';
 import * as Logger from 'src/utils/logger';
 
-export const fetchCommand = async (url: string, options: any) => {
+export const configCommand = async (url: string, options: any) => {
 	try {
 		// Options
 		const environment = options.e || options.env;

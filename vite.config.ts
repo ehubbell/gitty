@@ -7,7 +7,7 @@ export default defineConfig({
 		sourcemap: true,
 		lib: {
 			entry: path.resolve(__dirname, 'src/index.ts'),
-			name: 'playbooksTransfer',
+			name: 'gitdl',
 			formats: ['es', 'cjs'],
 			fileName: format => `index.${format}.js`,
 		},
