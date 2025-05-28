@@ -1,22 +1,20 @@
 const ora = require('ora');
 import { ConfigService } from 'src/services/config-service';
-import { GitService } from 'src/services/git-service';
 import { GithubService } from 'src/services/github-service';
 import { StorageService } from 'src/services/storage-service';
-import { timeout } from 'src/utils/helpers';
+import { formatError, timeout } from 'src/utils';
 import * as Logger from 'src/utils/logger';
 
 export const downloadCommand = async (url: string, options: any) => {
 	try {
 		// Options
-		const environment = options.e || options.env;
-		const clone = options.c || options.clone || null;
-		const path = options.p || options.path || null;
-		const version = options.v || options.version || null;
-		Logger.log('options: ', { environment, clone, path, version });
+		const env = options.config;
+		const path = options.path || null;
+		const version = options.version || null;
+		Logger.log('options: ', { env, path, version });
 
 		// Config
-		const configService = new ConfigService({ basePath: environment });
+		const configService = new ConfigService({ basePath: env });
 		const configSpinner = ora('Setting up...\n').start();
 		await timeout(300);
 
@@ -71,35 +69,8 @@ export const downloadCommand = async (url: string, options: any) => {
 		await storageService.cleanRepo();
 		await storageService.removeZip();
 		storageSpinner.succeed('Storage complete!');
-
-		// Clone Step
-		if (clone) {
-			const cloneSpinner = ora('Checking github...\n').start();
-			await timeout(300);
-			const repoResponse = await githubService.getRepo(clone, formattedName);
-			if (repoResponse.status !== 404) {
-				cloneSpinner.fail('Repo already exists!');
-				return Logger.error('github: ', JSON.stringify(repoResponse));
-			}
-
-			cloneSpinner.text = 'Creating repo...';
-			const createResponse = await githubService.createRepo(clone, {
-				name: formattedName,
-				private: false,
-			});
-			if (createResponse.status !== 201) {
-				cloneSpinner.fail('Create failed!');
-				return Logger.error('github: ', JSON.stringify(createResponse));
-			}
-
-			cloneSpinner.text = 'Cloning repo...';
-			const gitService = new GitService({ basePath, token: config.GITHUB_TOKEN });
-			await gitService.create(clone, formattedName);
-			cloneSpinner.succeed('Clone complete!');
-		}
 	} catch (e) {
-		Logger.log(e);
-		Logger.error('Transfer failed:', e);
+		Logger.error(formatError(e));
 		process.exit();
 	}
 };

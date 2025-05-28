@@ -1,5 +1,15 @@
 const Fs = require('fs-extra');
 
+export const checkOrCreateFile = async (pathName, fileName) => {
+	const fileExists = await checkPath(`${pathName}/${fileName}`);
+	return fileExists ? fileExists : await createFile(pathName, fileName);
+};
+
+export const createFile = async (pathName, fileName) => {
+	await createPath(pathName);
+	return await Fs.promises.writeFile(`${pathName}/${fileName}`, '');
+};
+
 export const readFile = async (filePath, encoding = 'utf8') => {
 	return await Fs.promises.readFile(filePath, encoding);
 };
@@ -11,9 +21,13 @@ export const checkPath = async (pathName: string) => {
 		.catch(() => false);
 };
 
+export const createPath = async pathName => {
+	return await Fs.mkdirSync(pathName, { recursive: true });
+};
+
 export const checkOrCreatePath = async (pathName: string) => {
 	const pathExists = await checkPath(pathName);
-	if (!pathExists) await Fs.mkdirSync(pathName, { recursive: true });
+	return pathExists ? pathExists : await createPath(pathName);
 };
 
 export const fileStats = async (filePath: string) => {

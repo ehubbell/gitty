@@ -1,5 +1,4 @@
 import { Octokit } from '@octokit/core';
-import * as logger from 'src/utils/logger';
 
 interface GithubService {
 	token: string;
@@ -60,7 +59,7 @@ class GithubService {
 		try {
 			const response = await this.getOrgs();
 			if (response.status !== 200) throw response;
-			const hasOrg = response.data.find(v => v.login == ownerId);
+			const hasOrg = response.data.find(v => v.login === ownerId);
 			return hasOrg ? await this.createOrgRepo(ownerId, data) : await this.createPersonalRepo(data);
 		} catch (e) {
 			return { status: e.status, message: e.message };

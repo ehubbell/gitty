@@ -1,5 +1,4 @@
-const Fs = require('fs-extra');
-import * as FileSystem from 'src/utils/file-system';
+import * as FileSystem from 'src/utils/fs';
 
 interface ConfigService {
 	basePath: string;
@@ -11,6 +10,13 @@ class ConfigService {
 	}
 
 	/* ----- Methods ----- */
+	async setup() {
+		const fragments = this.basePath.split('/');
+		const path = fragments.filter((v, i) => i < fragments.length - 1).join('/');
+		const file = fragments[fragments.length - 1];
+		return await FileSystem.checkOrCreateFile(path, file);
+	}
+
 	async checkEmpty() {
 		// console.log("Checking path: ", this.basePath);
 		const pathExists = await FileSystem.checkPath(this.basePath);

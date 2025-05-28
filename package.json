@@ -47,13 +47,16 @@
     "commit": "scripts/commit.sh",
     "deploy": "scripts/deploy.sh",
     "git": "git push --tags",
-    "test": "jest"
+    "test": "jest",
+    "prepare": "husky"
   },
   "dependencies": {
     "@octokit/core": "^6.1.2",
     "archiver": "^7.0.1",
     "chalk": "^4.1.2",
     "enquirer": "^2.4.1",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
     "fs-extra": "^11.2.0",
     "fstream": "^1.0.12",
     "ora": "5.4.1",
@@ -74,6 +77,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-eqeqeq-fix": "^1.0.3",
     "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^9.1.7",
     "jest": "^29.5.0",
     "prettier": "^2.8.1",
     "ts-jest": "^29.1.0",

@@ -1,5 +1,4 @@
 const { simpleGit, GitConfigScope, ResetMode } = require('simple-git');
-import * as logger from 'src/utils/logger';
 
 interface GitService {
 	basePath: string;

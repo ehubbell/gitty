@@ -2,8 +2,8 @@
 
 const os = require('os');
 const sade = require('sade');
-import { configCommand, cloneCommand, downloadCommand } from 'src/commands';
 import { version } from '../package.json';
+import { cloneCommand, configCommand, downloadCommand } from 'src/commands';
 
 const cli = sade('gitty');
 
@@ -15,7 +15,7 @@ cli
 cli.command('config').describe('Display your config file.').example('gitty config').action(configCommand);
 
 cli
-	.command('gitty clone <url>')
+	.command('clone <url>')
 	.describe('Clone a Github repo or subdirectory to your account.')
 	.option('--account', 'Specify the account where we should add this clone.')
 	.option('--name', 'Specify the name for cloned repository.')
@@ -27,13 +27,12 @@ cli
 	.action(cloneCommand);
 
 cli
-	.command('gitty download <url>')
+	.command('download <url>')
 	.describe('Download a Github repo or subdirectory to your local file system.')
-	.option('--name', 'Specify the name for downloaded repository.')
 	.option('--path', 'Specify path to a local directory (defaults to CWD).')
 	.option('--version', 'Specify tarball version (optional).')
 	.example('gitty download https://github.com/vercel/vercel')
-	.example('gitty clone https://github.com/vercel/vercel/tree/main/examples/angular --path ~/templates/angular')
+	.example('gitty download https://github.com/vercel/vercel/tree/main/examples/angular --path ~/templates/angular')
 	.action(downloadCommand);
 
 cli.parse(process.argv);
