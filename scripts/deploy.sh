@@ -46,7 +46,7 @@ wait $build_id
 if [ $? -eq 1 ]; then exit; fi
 
 echo -e "\n npm publish \n"
-npm publish & publish_id=$!
+npm publish --public & publish_id=$!
 wait $publish_id
 if [ $? -eq 1 ]; then exit; fi
 
