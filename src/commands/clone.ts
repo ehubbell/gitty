@@ -52,7 +52,7 @@ export const cloneCommand = async (url: string, options: any) => {
 			: await githubService.getRepoZip(ownerId, repoId);
 		if (zipResponse.status !== 200) {
 			githubSpinner.fail('Fetch failed!');
-			return Logger.error('Github: ', zipResponse);
+			return Logger.error('Github: ', JSON.stringify(zipResponse));
 		}
 		githubSpinner.succeed('Fetch complete!');
 
