@@ -49,13 +49,13 @@ GITHUB_TOKEN=****
 ## Testing
 - npm run build
 - npm pack
-- npm install ./npm-package-name.tgz
-- playbooks-transfer repo_url --destination ~/user/file/path
+- npm install ./npm-package-name.tgz -g
+- gitty download <repo_url> --path ~/templates/repo-name
 
 
 ## Author
-- Playbooks XYZ
-- support@playbooks.xyz
+- Eric Hubbell
+- eric@erichubbell.com
 
 
 ## Inspiration
