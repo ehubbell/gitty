@@ -61,7 +61,6 @@ class StorageService {
 					const formattedPath = path.join(this.fileName, slicedPath);
 					const updatedPath = formattedPath.replace('/' + this.nestedPath, '/');
 					const finalPath = path.join(this.basePath, updatedPath);
-					console.log({ fileName, slicedPath, updatedPath, finalPath });
 					if (type === 'Directory') return entry.autodrain();
 					if (this.nestedPath) {
 						const rootPath = slicedPath.split('/')[1];
