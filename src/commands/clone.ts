@@ -61,8 +61,8 @@ export const cloneCommand = async (url: string, options: any) => {
 		const storageSpinner = ora('Storing repo...\n').start();
 		await timeout(300);
 
-		const storageValid = await storageService.checkEmpty();
-		if (!storageValid) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
+		const storageEmpty = await storageService.checkEmpty();
+		if (!storageEmpty) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
 		await storageService.saveRepo(zipResponse.data);
 		await storageService.unzipRepo();
 		await storageService.cleanRepo();
