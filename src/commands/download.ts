@@ -10,8 +10,11 @@ export const downloadCommand = async (url: string, options: any) => {
 		// Options
 		const env = options.config;
 		const path = options.path || null;
+		const unzip = options.unzip || null;
+		const clean = options.clean || null;
+		const remove = options.remove || null;
 		const version = options.version || null;
-		Logger.log('options: ', { env, path, version });
+		Logger.log('options: ', { env, path, unzip, clean, remove, version });
 
 		// Config
 		const configService = new ConfigService({ basePath: env });
@@ -62,12 +65,14 @@ export const downloadCommand = async (url: string, options: any) => {
 		const storageSpinner = ora('Storing repo...\n').start();
 		await timeout(300);
 
-		const storageValid = await storageService.checkEmpty();
-		if (!storageValid) return storageSpinner.fail('Please clear the destination directory!');
-		await storageService.saveRepo(zipResponse.data);
-		await storageService.unzipRepo();
-		await storageService.cleanRepo();
-		await storageService.removeZip();
+		if (unzip) {
+			const storageValid = await storageService.checkEmpty();
+			if (!storageValid) return storageSpinner.fail('Please clear the destination directory!');
+			await storageService.saveRepo(zipResponse.data);
+			await storageService.unzipRepo();
+			if (clean) await storageService.cleanRepo();
+			if (remove) await storageService.removeZip();
+		}
 		storageSpinner.succeed('Storage complete!');
 	} catch (e) {
 		Logger.error(formatError(e));

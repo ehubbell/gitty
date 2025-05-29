@@ -13,18 +13,18 @@ A simple CLI that will fetch, store, and clone Github repos.
 
 
 ## Description
-The commands above will install the SDK to your local machine and make the `gitty` command available globally.
-You can then download any Github repository or subdirectory. For private repos, please make sure to add your `github_token` to the config file.
-
-
-## How it works
-The `gitty` commands downloads a copy of the main repository's tarball from Github, unzips it, formats it, and stores the formatted version in your cwd.
-Alternatively, you can pass in a `--path` parameter indicating where you want to install the repository relative to the current directory.
-As part of the formatting, we automatically remove the `.git` directory and the tarball file so you have a clean working repository.
+The Gitty CLI gives developers an easy way to download Github repositories and subdirectories directly to their local machine.
+It also gives developers an easy way to clone Github repositories and subdirectories to their own Github account.
+Depending on the functionality you need, Gitty accepts a variety of options to customize your experience.
+After installation, simply use the `gitty` prompt followed by one of the commands outlined below.
+Depending on outcome you need, Gitty accepts a variety of options
 
 
 ## Config File
-Gitty will look for a `.gittyrc` config file at the root of your file system and read the following variables:
+Gitty will look for a `.gittyrc` config file at the root of your file system containing your platform secrets.
+To expedite your work, you can use the `gitty config` to create and / or read that file.
+You can also pass the `--config` parameter to any command to specify a different path.
+For now, Gitty will interpret the following variables:
 
 ```
 # ~/.gittyrc
@@ -34,9 +34,14 @@ GITHUB_TOKEN=****
 
 ## Commands
 - `gitty config`
+- `gitty config --config ~/.gittyenv`
 - `gitty download <repo_url>`
 - `gitty download <repo_url> --path ~/templates/repo-name`
+- `gitty download <repo_url> --unzip --clean --remove`
 - `gitty clone <repo_url> --account <account_login> --name <repo_name>`
+
+## Notes
+- When unzipping
 
 
 ## Development
