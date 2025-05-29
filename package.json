@@ -8,7 +8,7 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "gitdl": "dist/index.cjs.js"
+    "gitty": "dist/index.cjs.js"
   },
   "files": [
     "dist"
