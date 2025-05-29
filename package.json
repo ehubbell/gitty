@@ -1,6 +1,6 @@
 {
   "name": "@ehubbell/gitty",
-  "description": "A simple CLI that will fetch, store, and clone Github repositories.",
+  "description": "A simple CLI that will fetch, store, and clone Github repos.",
   "homepage": "https://github.com/ehubbell/gitty",
   "version": "0.2.0",
   "license": "ISC",

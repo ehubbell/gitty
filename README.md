@@ -1,8 +1,9 @@
 ## Overview
-A simple CLI that will fetch, store, and clone Github repositories and subdirectories.
+A simple CLI that will fetch, store, and clone Github repos.
 
 
 ## Prerequisites
+- Github
 - Node
 
 
