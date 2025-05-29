@@ -38,11 +38,8 @@ export const downloadCommand = async (url: string, options: any) => {
 
 		// Destination
 		const basePath = path || process.cwd();
-		const destinationFragments = path?.split('/');
-		const formattedName = path
-			? destinationFragments[destinationFragments.length - 1]
-			: githubFragments[githubFragments.length - 1];
-		Logger.log('destination: ', { basePath, formattedName });
+		const fileName = githubFragments[githubFragments.length - 1];
+		Logger.log('destination: ', { basePath, fileName });
 
 		configSpinner.succeed('Setup complete!');
 
@@ -61,18 +58,16 @@ export const downloadCommand = async (url: string, options: any) => {
 		githubSpinner.succeed('Fetch complete!');
 
 		// Storage Step
-		const storageService = new StorageService({ basePath, formattedName, nestedPath });
+		const storageService = new StorageService({ basePath, fileName, nestedPath });
 		const storageSpinner = ora('Storing repo...\n').start();
 		await timeout(300);
 
-		if (unzip) {
-			const storageValid = await storageService.checkEmpty();
-			if (!storageValid) return storageSpinner.fail('Please clear the destination directory!');
-			await storageService.saveRepo(zipResponse.data);
-			await storageService.unzipRepo();
-			if (clean) await storageService.cleanRepo();
-			if (remove) await storageService.removeZip();
-		}
+		const storageEmpty = await storageService.checkEmpty();
+		if (!storageEmpty) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
+		await storageService.saveRepo(zipResponse.data);
+		if (unzip) await storageService.unzipRepo();
+		if (clean) await storageService.cleanRepo();
+		if (remove) await storageService.removeZip();
 		storageSpinner.succeed('Storage complete!');
 	} catch (e) {
 		Logger.error(formatError(e));

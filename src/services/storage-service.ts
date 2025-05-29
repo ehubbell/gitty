@@ -1,4 +1,5 @@
 const Archiver = require('archiver');
+const path = require('node:path');
 const Fs = require('fs-extra');
 const Stream = require('fstream');
 const Unzip = require('unzip-stream');
@@ -6,31 +7,32 @@ import * as FileSystem from 'src/utils/fs';
 
 interface StorageService {
 	basePath: string;
-	formattedName: string;
+	fileName: string;
 	nestedPath?: string;
 }
 
 class StorageService {
-	constructor(props: { basePath: string; formattedName: string; nestedPath?: string }) {
+	constructor(props) {
 		this.basePath = props.basePath;
-		this.formattedName = props?.formattedName;
+		this.fileName = props?.fileName;
 		this.nestedPath = props?.nestedPath;
 	}
 
 	/* ----- Computed ----- */
 	get zipFile() {
-		return `${this.basePath}/${this.formattedName}.zip`;
+		return `${this.basePath}/${this.fileName}.zip`;
 	}
 
 	/* ----- Methods ----- */
 	async checkEmpty() {
-		const pathExists = await FileSystem.checkPath(this.basePath);
+		const formattedPath = path.join(this.basePath, this.fileName);
+		const pathExists = await FileSystem.checkPath(formattedPath);
 		if (pathExists) {
-			const path = await FileSystem.fileStats(this.basePath);
+			const path = await FileSystem.fileStats(formattedPath);
 			if (path.isDirectory()) {
-				const entries = await Fs.readdir(this.basePath);
-				console.log('entries: ', entries);
-				return entries.length > 0 ? false : true;
+				const entries = await Fs.promises.readdir(formattedPath);
+				const filteredEntries = entries.filter(v => v.slice(0, 1) !== '.');
+				return filteredEntries.length > 0 ? false : true;
 			}
 			return true;
 		}
@@ -49,15 +51,17 @@ class StorageService {
 	async unzipRepo() {
 		await FileSystem.checkOrCreatePath(this.basePath);
 
-		await new Promise((resolve, reject) => {
+		return await new Promise((resolve, reject) => {
 			Fs.createReadStream(this.zipFile)
 				.pipe(Unzip.Parse())
 				.on('entry', (entry: any) => {
 					const type = entry.type;
 					const fileName = entry.path;
 					const slicedPath = fileName.slice(fileName.indexOf('/'), fileName.length);
-					const formattedPath = slicedPath.replace('/' + this.nestedPath, '/');
-					const finalPath = this.basePath + formattedPath;
+					const formattedPath = path.join(this.fileName, slicedPath);
+					const updatedPath = formattedPath.replace('/' + this.nestedPath, '/');
+					const finalPath = path.join(this.basePath, updatedPath);
+					console.log({ fileName, slicedPath, updatedPath, finalPath });
 					if (type === 'Directory') return entry.autodrain();
 					if (this.nestedPath) {
 						const rootPath = slicedPath.split('/')[1];

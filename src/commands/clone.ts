@@ -37,8 +37,8 @@ export const cloneCommand = async (url: string, options: any) => {
 
 		// Destination
 		const basePath = process.cwd();
-		const formattedName = name || githubFragments[githubFragments.length - 1];
-		Logger.log('destination: ', { basePath, formattedName });
+		const fileName = name || githubFragments[githubFragments.length - 1];
+		Logger.log('destination: ', { basePath, fileName });
 
 		configSpinner.succeed('Setup complete!');
 
@@ -57,12 +57,12 @@ export const cloneCommand = async (url: string, options: any) => {
 		githubSpinner.succeed('Fetch complete!');
 
 		// Storage Step
-		const storageService = new StorageService({ basePath, formattedName, nestedPath });
+		const storageService = new StorageService({ basePath, fileName, nestedPath });
 		const storageSpinner = ora('Storing repo...\n').start();
 		await timeout(300);
 
 		const storageValid = await storageService.checkEmpty();
-		if (!storageValid) return storageSpinner.fail('Please clear the destination directory!');
+		if (!storageValid) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
 		await storageService.saveRepo(zipResponse.data);
 		await storageService.unzipRepo();
 		await storageService.cleanRepo();
@@ -72,7 +72,7 @@ export const cloneCommand = async (url: string, options: any) => {
 		// Clone Step
 		const cloneSpinner = ora('Checking github...\n').start();
 		await timeout(300);
-		const repoResponse = await githubService.getRepo(account, formattedName);
+		const repoResponse = await githubService.getRepo(account, fileName);
 		if (repoResponse.status !== 404) {
 			cloneSpinner.fail('Repo already exists!');
 			return Logger.error('github: ', JSON.stringify(repoResponse));
@@ -80,7 +80,7 @@ export const cloneCommand = async (url: string, options: any) => {
 
 		cloneSpinner.text = 'Creating repo...';
 		const createResponse = await githubService.createRepo(account, {
-			name: formattedName,
+			name: fileName,
 			private: false,
 		});
 		if (createResponse.status !== 201) {
@@ -90,7 +90,7 @@ export const cloneCommand = async (url: string, options: any) => {
 
 		cloneSpinner.text = 'Cloning repo...';
 		const gitService = new GitService({ basePath, token: config.GITHUB_TOKEN });
-		await gitService.create(account, formattedName);
+		await gitService.create(account, fileName);
 		cloneSpinner.succeed('Clone complete!');
 	} catch (e) {
 		Logger.error(formatError(e));
