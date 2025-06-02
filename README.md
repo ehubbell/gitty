@@ -14,10 +14,8 @@ A simple CLI that will fetch, store, and clone Github repos.
 
 ## Description
 The Gitty CLI gives developers an easy way to download Github repositories and subdirectories directly to their local machine.
-It also gives developers an easy way to clone Github repositories and subdirectories to their own Github account.
+It also lets developers clone Github repositories and subdirectories to their Github account and organizations where they're a member.
 Depending on the functionality you need, Gitty accepts a variety of options to customize your experience.
-After installation, simply use the `gitty` prompt followed by one of the commands outlined below.
-Depending on outcome you need, Gitty accepts a variety of options
 
 
 ## Config File

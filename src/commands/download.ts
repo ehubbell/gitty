@@ -2,7 +2,7 @@ const ora = require('ora');
 import { ConfigService } from 'src/services/config-service';
 import { GithubService } from 'src/services/github-service';
 import { StorageService } from 'src/services/storage-service';
-import { formatError, timeout } from 'src/utils';
+import { formatError, sleep } from 'src/utils';
 import * as Logger from 'src/utils/logger';
 
 export const downloadCommand = async (url: string, options: any) => {
@@ -19,7 +19,7 @@ export const downloadCommand = async (url: string, options: any) => {
 		// Config
 		const configService = new ConfigService({ basePath: env });
 		const configSpinner = ora('Setting up...\n').start();
-		await timeout(300);
+		await sleep(300);
 
 		const configValid = await configService.checkEmpty();
 		if (!configValid) return configSpinner.fail('Please provide a valid config file.');
@@ -46,7 +46,7 @@ export const downloadCommand = async (url: string, options: any) => {
 		// Github Step
 		const githubService = new GithubService({ token: config.GITHUB_TOKEN });
 		const githubSpinner = ora('Fetching repo...\n').start();
-		await timeout(300);
+		await sleep(300);
 
 		const zipResponse = version
 			? await githubService.getRepoVersionZip(ownerId, repoId, version)
@@ -60,7 +60,7 @@ export const downloadCommand = async (url: string, options: any) => {
 		// Storage Step
 		const storageService = new StorageService({ basePath, fileName, nestedPath });
 		const storageSpinner = ora('Storing repo...\n').start();
-		await timeout(300);
+		await sleep(300);
 
 		const storageEmpty = await storageService.checkEmpty();
 		if (!storageEmpty) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
