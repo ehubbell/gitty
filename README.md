@@ -33,9 +33,6 @@ GITHUB_TOKEN=****
 - `gitty download <repo_url> --unzip --clean --remove`
 - `gitty clone <repo_url> --account <account_login> --name <repo_name>`
 
-## Notes
-- When unzipping
-
 ## Development
 - `git clone`
 - `npm install`
