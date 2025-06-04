@@ -1,22 +1,17 @@
 ## Overview
-A simple CLI that will fetch, store, and clone Github repos.
-
+The Gitty CLI gives developers an easy way to download Github repositories and subdirectories directly to their local machine.
+It also lets developers clone Github repositories and subdirectories to their Github account and organizations where they're a member.
+Depending on the functionality you need, Gitty accepts a variety of options to customize your experience.
 
 ## Prerequisites
 - Github
 - Node
 
-
 ## Quick Start
-- `npm install -g @ehubbell/gitty`
-- `gitty download <repo_url>`
-
-
-## Description
-The Gitty CLI gives developers an easy way to download Github repositories and subdirectories directly to their local machine.
-It also lets developers clone Github repositories and subdirectories to their Github account and organizations where they're a member.
-Depending on the functionality you need, Gitty accepts a variety of options to customize your experience.
-
+```
+npm install @ehubbell/gitty --global
+gitty download <repo_url>
+```
 
 ## Config File
 Gitty will look for a `.gittyrc` config file at the root of your file system containing your platform secrets.
@@ -41,19 +36,15 @@ GITHUB_TOKEN=****
 ## Notes
 - When unzipping
 
-
 ## Development
 - `git clone`
 - `npm install`
 - `npm start`
 
-
-## Deploy
-- npm build
-- npm version [major | minor | patch]
-- npm publish
-- npm run git
-
+## Scripts
+- We've included a couple of helpful scripts for faster development.
+- deploy: `npm run deploy -- 'commit message'`
+- publish: `npm run publish -- 'commit message' [major|minor|patch]`
 
 ## Testing
 - npm run build
@@ -61,11 +52,9 @@ GITHUB_TOKEN=****
 - npm install ./npm-package-name.tgz -g
 - gitty download <repo_url> --path ~/templates/repo-name
 
-
 ## Inspiration
 - degit
 - gittar
 
-
-## Contributions
+## Notes
 Feel free to open an issue to discuss changes or submit a PR for bug fixes.
