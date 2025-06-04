@@ -9,7 +9,7 @@ Depending on the functionality you need, Gitty accepts a variety of options to c
 
 ## Quick Start
 ```
-npm install @ehubbell/gitty --global
+npm install -g @ehubbell/gitty
 gitty download <repo_url>
 ```
 
