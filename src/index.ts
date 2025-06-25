@@ -29,10 +29,8 @@ cli
 cli
 	.command('download <url>')
 	.describe('Download a Github repo or subdirectory to your local file system.')
-	.option('--path', 'Specify path to a local directory (defaults to CWD).')
-	.option('--unzip', 'Automatically unzip the binary file', false)
-	.option('--clean', 'Automatically remove the .git directory', false)
-	.option('--remove', 'Automatically remove the binary file', false)
+	.option('--path', 'Path to destination folder', '.')
+	.option('--name', 'Name the downloaded repository')
 	.option('--version', 'Specify tarball version (optional).')
 	.example('gitty download https://github.com/vercel/next.js')
 	.example('gitty download https://github.com/vercel/next.js/tree/main/examples/angular --path ~/templates/angular')

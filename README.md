@@ -27,10 +27,9 @@ GITHUB_TOKEN=****
 
 ## Commands
 - `gitty config`
-- `gitty config --config ~/.gittyenv`
+- `gitty config --config ~/.gitty`
 - `gitty download <repo_url>`
-- `gitty download <repo_url> --path ~/templates/repo-name`
-- `gitty download <repo_url> --unzip --clean --remove`
+- `gitty download <repo_url> --path ~/username/sites --name test-repo`
 - `gitty clone <repo_url> --account <account_login> --name <repo_name>`
 
 ## Development
@@ -39,9 +38,9 @@ GITHUB_TOKEN=****
 - `npm start`
 
 ## Scripts
-- We've included a couple of helpful scripts for faster development.
-- deploy: `npm run deploy -- 'commit message'`
-- publish: `npm run publish -- 'commit message' [major|minor|patch]`
+We've included a couple of helpful scripts for faster development.
+- commit: `npm run commit -- 'commit message'`
+- deploy: `npm run deploy -- 'commit message' [major|minor|patch]`
 
 ## Testing
 - npm run build

@@ -2,19 +2,17 @@ const ora = require('ora');
 import { ConfigService } from 'src/services/config-service';
 import { GithubService } from 'src/services/github-service';
 import { StorageService } from 'src/services/storage-service';
-import { formatError, sleep } from 'src/utils';
+import { formatError, formatName, sleep } from 'src/utils';
 import * as Logger from 'src/utils/logger';
 
 export const downloadCommand = async (url: string, options: any) => {
 	try {
 		// Options
 		const env = options.config;
-		const path = options.path || null;
-		const unzip = options.unzip || null;
-		const clean = options.clean || null;
-		const remove = options.remove || null;
+		const path = options.path || process.cwd();
+		const name = options.name || formatName(url);
 		const version = options.version || null;
-		Logger.log('options: ', { env, path, unzip, clean, remove, version });
+		Logger.log('options: ', { env, path, name, version });
 
 		// Config
 		const configService = new ConfigService({ basePath: env });
@@ -37,10 +35,6 @@ export const downloadCommand = async (url: string, options: any) => {
 		Logger.log('url: ', { ownerId, repoId, nestedPath });
 
 		// Destination
-		const basePath = path || process.cwd();
-		const fileName = githubFragments[githubFragments.length - 1];
-		Logger.log('destination: ', { basePath, fileName });
-
 		configSpinner.succeed('Setup complete!');
 
 		// Github Step
@@ -58,16 +52,16 @@ export const downloadCommand = async (url: string, options: any) => {
 		githubSpinner.succeed('Fetch complete!');
 
 		// Storage Step
-		const storageService = new StorageService({ basePath, fileName, nestedPath });
+		const storageService = new StorageService({ basePath: path, fileName: name, nestedPath });
 		const storageSpinner = ora('Storing repo...\n').start();
 		await sleep(300);
 
 		const storageEmpty = await storageService.checkEmpty();
-		if (!storageEmpty) return storageSpinner.fail(`Please clear directory: ${basePath}/${fileName}`);
+		if (!storageEmpty) return storageSpinner.fail(`Please clear directory: ${path}/${name}`);
 		await storageService.saveRepo(zipResponse.data);
-		if (unzip) await storageService.unzipRepo();
-		if (clean) await storageService.cleanRepo();
-		if (remove) await storageService.removeZip();
+		await storageService.unzipRepo();
+		await storageService.cleanRepo();
+		await storageService.removeZip();
 		storageSpinner.succeed('Storage complete!');
 	} catch (e) {
 		Logger.error(formatError(e));

@@ -1,13 +1,13 @@
 const path = require('path');
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
 	base: './',
 	build: {
-		sourcemap: true,
+		sourcemap: mode === 'development',
 		lib: {
 			entry: path.resolve(__dirname, 'src/index.ts'),
-			name: 'gitdl',
+			name: 'Gitty',
 			formats: ['es', 'cjs'],
 			fileName: format => `index.${format}.js`,
 		},
@@ -23,4 +23,4 @@ export default defineConfig({
 			src: '/src',
 		},
 	},
-});
+}));
