@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const os = require('os');
 const sade = require('sade');
 import { version } from '../package.json';

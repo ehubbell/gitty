@@ -1,4 +1,4 @@
-const path = require('path');
+import path from 'path';
 import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => ({
@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
 			entry: path.resolve(__dirname, 'src/index.ts'),
 			name: 'Gitty',
 			formats: ['es', 'cjs'],
-			fileName: format => `index.${format}.js`,
+			fileName: (format, entryName) => `${entryName}.${format}.js`,
 		},
 		rollupOptions: {
 			external: [],
