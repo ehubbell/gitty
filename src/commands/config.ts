@@ -22,7 +22,7 @@ export const configCommand = async (options: any) => {
 		// Response
 		const data = {};
 		Object.keys(contents).map(key => {
-			if (key === 'token') return (data[key] = '********');
+			if (key.toLowerCase().includes('token')) return (data[key] = '********');
 			data[key] = contents[key];
 		});
 		const formattedResponse = Object.keys(data).length > 0 ? JSON.stringify(data, null, 2) : 'Nothing to see yet.';

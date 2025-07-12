@@ -4,7 +4,7 @@ export const sleep = ms => {
 
 export const formatName = url => {
 	const paths = url.split('?')[0].split('#')[0].split('/');
-	const name = url.split('/')[paths.length - 1];
+	const name = paths[paths.length - 1];
 	return name.split('.')[0];
 };
 
