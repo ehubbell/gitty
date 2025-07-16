@@ -27,6 +27,7 @@ cli
 cli
 	.command('download <url>')
 	.describe('Download a Github repo or subdirectory to your local file system.')
+	.option('--branch', 'Specify the branch', '')
 	.option('--path', 'Path to destination folder', '.')
 	.option('--name', 'Name the downloaded repository')
 	.option('--version', 'Specify tarball version (optional).')

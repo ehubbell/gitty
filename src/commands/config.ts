@@ -1,14 +1,13 @@
 const ora = require('ora');
 import { ConfigService } from 'src/services/config-service';
-import { sleep } from 'src/utils';
-import * as Logger from 'src/utils/logger';
+import { logger, sleep } from 'src/utils';
 
 export const configCommand = async (options: any) => {
 	const spinner = ora('Fetching config...');
 	try {
 		// Setup
 		const config = options.c || options.config;
-		Logger.log('options: ', { config });
+		logger.log('options: ', { config });
 
 		// Start
 		spinner.start();
@@ -28,10 +27,10 @@ export const configCommand = async (options: any) => {
 		const formattedResponse = Object.keys(data).length > 0 ? JSON.stringify(data, null, 2) : 'Nothing to see yet.';
 
 		spinner.succeed();
-		Logger.success(`Config [${config}]: `, formattedResponse);
+		logger.success(`Config [${config}]: `, formattedResponse);
 	} catch (e) {
 		spinner.fail();
-		Logger.error(e);
+		logger.error(e);
 		process.exit();
 	}
 };

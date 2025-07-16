@@ -35,9 +35,9 @@ class GithubService {
 		}
 	}
 
-	async getRepoVersionZip(ownerId: string, repoId: string, versionId?: string) {
+	async getRepoVersionZip(ownerId: string, repoId: string, ref?: string) {
 		try {
-			const endpoint = `/repos/${ownerId}/${repoId}/zipball/${versionId}`;
+			const endpoint = `/repos/${ownerId}/${repoId}/zipball/${ref}`;
 			const response = await this.client.request(`GET ${endpoint}`);
 			return { status: response.status, data: response.data };
 		} catch (e) {
@@ -92,3 +92,4 @@ export { GithubService };
 // Docs
 // https://docs.github.com/en/rest/repos/repos
 // https://docs.github.com/en/rest/repos/repos#get-a-repository
+// https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28#download-a-repository-archive-zip
