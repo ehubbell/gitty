@@ -1,6 +1,6 @@
-const os = require('os');
-const sade = require('sade');
 import { version } from '../package.json';
+import os from 'node:os';
+import sade from 'sade';
 import { cloneCommand, configCommand, downloadCommand } from 'src/commands';
 
 const cli = sade('gitty');
@@ -32,7 +32,9 @@ cli
 	.option('--name', 'Name the downloaded repository')
 	.option('--version', 'Specify tarball version (optional).')
 	.example('gitty download https://github.com/vercel/next.js')
-	.example('gitty download https://github.com/vercel/next.js/tree/main/examples/angular --path ~/templates/angular')
+	.example(
+		'gitty download https://github.com/vercel/next.js/tree/main/examples/angular --path ~/templates --name angular',
+	)
 	.example('gitty download https://github.com/vercel/next.js/tree/main/examples/angular --unzip --clean --remove')
 	.action(downloadCommand);
 

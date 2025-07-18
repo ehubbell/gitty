@@ -1,9 +1,9 @@
-const Archiver = require('archiver');
-const path = require('node:path');
-const Fs = require('fs-extra');
-const Stream = require('fstream');
-const Unzip = require('unzip-stream');
+import Archiver from 'archiver';
+import Fs from 'fs-extra';
+import Stream from 'fstream';
+import path from 'node:path';
 import * as FileSystem from 'src/utils/fs';
+import Unzip from 'unzip-stream';
 
 interface StorageService {
 	basePath: string;

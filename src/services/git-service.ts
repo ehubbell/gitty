@@ -1,4 +1,4 @@
-const { simpleGit, GitConfigScope, ResetMode } = require('simple-git');
+import { GitConfigScope, ResetMode, simpleGit } from 'simple-git';
 
 interface GitService {
 	basePath: string;

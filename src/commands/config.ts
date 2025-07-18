@@ -1,4 +1,4 @@
-const ora = require('ora');
+import ora from 'ora';
 import { ConfigService } from 'src/services/config-service';
 import { logger, sleep } from 'src/utils';
 
