@@ -2,7 +2,7 @@
   "name": "@ehubbell/gitty",
   "description": "A simple CLI that will fetch, store, and clone Github repos.",
   "homepage": "https://github.com/ehubbell/gitty",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "license": "ISC",
   "type": "module",
   "main": "dist/index.js",
